@@ -7,30 +7,32 @@ import { Component, ElementRef, Input, OnChanges } from '@angular/core';
 })
 export class ArrayViewComponent implements OnChanges {
 
+  SPACING_FACTOR = 0.10;
   height = this.host.nativeElement.clientHeight;
   width = this.host.nativeElement.clientWidth;
-  SPACING_FACTOR = 0.10;
   @Input() array: number[] = [];
+  @Input() highlights: number[] = [];
+  @Input() changed = false;
 
   arrayConfig: {
-    colors: string[],
     heights: number[],
     width: number,
     spacing: number,
     lefts: number[],
+    class: string[]
   } = {
-    colors: [],
     heights: [],
     width: 0,
     spacing: 0,
-    lefts: []
+    lefts: [],
+    class: []
   };
 
   constructor(private host: ElementRef) {}
 
   ngOnChanges() {
-
     this.configArray();
+    this.setClass();
   }
 
   configArray() {
@@ -39,7 +41,6 @@ export class ArrayViewComponent implements OnChanges {
     const valuesWidth = Math.floor(this.width * (1 - this.SPACING_FACTOR));
     const spacingsWidth = this.width - valuesWidth;
     cfg.spacing = Math.floor(spacingsWidth / (this.array.length -1));
-    cfg.colors = this.array.map(val => 'firebrick');
     cfg.heights = this.array.map(val => val/maxH *this.height)
     cfg.width = Math.floor(valuesWidth / this.array.length);
     const usedSpacingWidth = cfg.spacing * (this.array.length -1);
@@ -47,6 +48,26 @@ export class ArrayViewComponent implements OnChanges {
     const offsetStart = (this.width - usedSpacingWidth - usedValWidth) / 2;
     cfg.lefts = this.array.map((_, i) => {
       return cfg.width * i + cfg.spacing * i + offsetStart
+    });
+  }
+
+  setClass() {
+    this.arrayConfig.class = this.arrayConfig.heights.map((cur, id) => {
+      // already sorted
+      if (
+        this.changed && id == this.highlights[0] || id < this.highlights[0]
+      ) { 
+        return 'value sorted'; 
+      }
+      // current value
+      if (id === this.highlights[1]) { 
+        return 'value current unsorted';
+      }
+      // lowest value seen this loop
+      if (id === this.highlights[2] && this.changed === false) { 
+        return 'value lowest';
+      }
+      return 'value unsorted';
     });
   }
 }

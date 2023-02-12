@@ -1,9 +1,9 @@
 <div *ngFor="let el of array; let id = index;"
+  [class] = "arrayConfig.class[id]"
   [ngStyle]="{
     'position': 'absolute',
     'height.px': arrayConfig.heights[id],
     'width.px': arrayConfig.width,
-    'background': arrayConfig.colors[id],
     'left.px': arrayConfig.lefts[id],
     'bottom.%': 0
   }"

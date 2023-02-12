@@ -2,3 +2,32 @@
   position: relative;
   display: block;
 }
+
+.value {
+  border-radius: 3px 3px 2px 2px;
+}
+
+
+.current:after {
+  content:"";
+  border: solid black;
+  border-width: 0 5px 5px 0;
+  display: inline-block;
+  padding: 5px;
+  position: relative;
+  bottom: -100%;
+  left: 50%;
+  transform: translate(-50%, 40%) rotate(-135deg);
+}
+
+.sorted {
+  background-color: green;
+}
+
+.unsorted {
+  background-color: firebrick;
+}
+
+.lowest {
+  background-color: orange;
+}
