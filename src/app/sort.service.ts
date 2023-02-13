@@ -4,7 +4,8 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class SortService {
-
+  
+  STEP_TIME = 100;
   constructor() { }
 
   *selectionSortGen(arr: number[]) {

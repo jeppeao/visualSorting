@@ -14,11 +14,12 @@ export class MainViewComponent {
 
   constructor (public sortService: SortService) {
     this.arr = this.randomArray(30, 30, 0);
+    
     const selectionSort = sortService.selectionSortGen(this.arr);
 
     const obs$ = zip(
       from(selectionSort),
-      interval(50),
+      interval(sortService.STEP_TIME),
       (a, b) => a
     ).subscribe(state => this.sortState = state);
   }

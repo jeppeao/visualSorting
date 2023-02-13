@@ -1,12 +1,12 @@
 :host {
   position: relative;
   display: block;
+  --animation-time: 1s;
 }
 
 .value {
   border-radius: 3px 3px 2px 2px;
 }
-
 
 .current:after {
   content:"";
@@ -17,7 +17,7 @@
   position: relative;
   bottom: -100%;
   left: 50%;
-  transform: translate(-50%, 40%) rotate(-135deg);
+  transform: translate(-50%, 20%) rotate(-135deg);
 }
 
 .sorted {
@@ -30,4 +30,13 @@
 
 .lowest {
   background-color: orange;
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opdacity: 1; }
+}
+
+.fade-in {
+  animation: fadeIn var(--animation-time);
 }

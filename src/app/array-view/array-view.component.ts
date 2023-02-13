@@ -13,6 +13,8 @@ export class ArrayViewComponent implements OnChanges {
   @Input() array: number[] = [];
   @Input() highlights: number[] = [];
   @Input() changed = false;
+  @Input() stepTime = 500;
+
 
   arrayConfig: {
     heights: number[],
@@ -28,11 +30,14 @@ export class ArrayViewComponent implements OnChanges {
     class: []
   };
 
-  constructor(private host: ElementRef) {}
+  constructor(private host: ElementRef) {
+    this.host.nativeElement.style.setProperty(
+      '--animation-time', (this.stepTime/1000).toString() + "s"
+    );
+  }
 
   ngOnChanges() {
     this.configArray();
-    this.setClass();
   }
 
   configArray() {
@@ -49,10 +54,17 @@ export class ArrayViewComponent implements OnChanges {
     cfg.lefts = this.array.map((_, i) => {
       return cfg.width * i + cfg.spacing * i + offsetStart
     });
+    this.setClass();
   }
 
   setClass() {
     this.arrayConfig.class = this.arrayConfig.heights.map((cur, id) => {
+      if (this.changed && this.highlights[0] === id) {
+        return "value sorted fade-in";
+      }
+      if (this.changed && this.highlights[2] === id) {
+        return "value unsorted fade-in";
+      }
       // already sorted
       if (
         this.changed && id == this.highlights[0] || id < this.highlights[0]
@@ -61,6 +73,9 @@ export class ArrayViewComponent implements OnChanges {
       }
       // current value
       if (id === this.highlights[1]) { 
+        if (id === this.highlights[2]) {
+          return 'value current lowest';
+        }
         return 'value current unsorted';
       }
       // lowest value seen this loop
