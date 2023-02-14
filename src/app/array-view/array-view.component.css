@@ -5,7 +5,13 @@
 }
 
 .value {
-  border-radius: 3px 3px 2px 2px;
+  border-radius: 2px;
+  min-height: 2px;
+  margin-bottom: -1px;
+}
+
+.current {
+  z-index:999;
 }
 
 .current:after {
@@ -28,15 +34,27 @@
   background-color: firebrick;
 }
 
-.lowest {
+.marked {
   background-color: orange;
 }
 
 @keyframes fadeIn {
-  0% { opacity: 0; }
+  0% { opacity: 0.2; }
   100% { opdacity: 1; }
 }
 
-.fade-in {
+.swapped {
   animation: fadeIn var(--animation-time);
 }
+
+.negative-value {
+  transform: translate(0, 100%);
+  margin-bottom: 1px;
+}
+
+.negative-value:after {
+  top: 0;
+  /* flipping arrow for negative values */
+  /* transform: translate(-50%, -120%) rotate(45deg); */
+}
+

@@ -5,30 +5,29 @@ import { Injectable } from '@angular/core';
 })
 export class SortService {
   
-  STEP_TIME = 100;
   constructor() { }
 
-  *selectionSortGen(arr: number[]) {
-    const narr = [...arr];
+  *selectionSortGen(arrayInput: number[]) {
+    const arr = [...arrayInput];
     let i = 0;
     let j = 0;
-    let changed;
+    let swapped;
     let low = 0;
-    for (i=0; i<narr.length; i++) {
+    for (i=0; i<arr.length; i++) {
       low = i;
-      for (j=i; j<narr.length; j++) {
-         if (narr[j] < narr[low]) {
+      for (j=i; j<arr.length; j++) {
+         if (arr[j] < arr[low]) {
           low = j;
         }
-        yield {arr: [...narr], highlights: [i, j, low], changed: false}
+        yield {arr: [...arr], i, j, low, swap: false}
       }
-      changed = low !== i ? true : false;
-      if (changed) {
-        [narr[i], narr[low]] = [narr[low], narr[i]];
+      swapped = low !== i ? true : false;
+      if (swapped) {
+        [arr[i], arr[low]] = [arr[low], arr[i]];
+        yield {arr: [...arr], i, j, low, swap: swapped}; 
       }
-      yield {arr: [...narr], highlights: [i, j, low], changed: changed}; 
+  
     }
-    yield {arr: [...narr], highlights: [i+1, j, low], changed: false};
   }
 
 }

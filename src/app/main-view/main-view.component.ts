@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { SortService } from '../sort.service';
-import { from, zip, map, interval, timer, take, mergeMap, delayWhen, Observable, concatMap, delay, of } from 'rxjs'
+import { from, zip, interval} from 'rxjs'
+import { ClassService } from '../class.service';
+import { SelectionSortStatus, DEFAULT_STEP_TIME } from '../constants';
+
 
 @Component({
   selector: 'app-main-view',
@@ -9,23 +12,27 @@ import { from, zip, map, interval, timer, take, mergeMap, delayWhen, Observable,
 })
 export class MainViewComponent {
   arr = [3, 4, 5, 2, 1, 8, 12, 15, 14, 12, 11, 4, 7, 9];
-  sortState: {arr: number[], highlights: number[], changed: boolean} =
-   {arr: [], highlights: [], changed: false};
+  sortState: SelectionSortStatus = {} as SelectionSortStatus;
+  classList: string[] = [];
+  stepTime: number = DEFAULT_STEP_TIME;
 
-  constructor (public sortService: SortService) {
-    this.arr = this.randomArray(30, 30, 0);
-    
+  constructor (public sortService: SortService, public classService: ClassService) {
+    this.arr = this.randomArray(8, 10, -5);
     const selectionSort = sortService.selectionSortGen(this.arr);
-
+    
     const obs$ = zip(
       from(selectionSort),
-      interval(sortService.STEP_TIME),
+      interval(this.stepTime),
       (a, b) => a
-    ).subscribe(state => this.sortState = state);
+    ).subscribe(state => {
+      this.classList = classService.getSelectionSortClassList(state);
+      this.sortState = state
+    });
+    
   }
 
   randomArray(length: number, hi: number, lo: number) {
     return [...Array(length)]
-     .map(() => Math.floor(Math.random()* (hi - lo) + 1) + lo);
+     .map(() => Math.floor(Math.random()* (hi + 1 - lo)) + lo);
   }
 }
