@@ -25,8 +25,8 @@ export class MainViewComponent {
       interval(this.stepTime),
       (a, b) => a
     ).subscribe(state => {
+      this.sortState = state;
       this.classList = classService.getSelectionSortClassList(state);
-      this.sortState = state
     });
     
   }

@@ -7,8 +7,8 @@ export class SortService {
   
   constructor() { }
 
-  *selectionSortGen(arrayInput: number[]) {
-    const arr = [...arrayInput];
+  *selectionSortGen(array: number[]) {
+    const arr = [...array]
     let i = 0;
     let j = 0;
     let swapped;

@@ -7,3 +7,11 @@ export interface SelectionSortStatus {
   low:number,
   swap: boolean
 }
+
+export enum ArrayClass {
+  current = 'current',
+  sorted = 'sorted',
+  unsorted = 'unsorted',
+  marked = 'marked',
+  swapped = 'swapped'
+}

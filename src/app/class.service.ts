@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SelectionSortStatus } from './constants'
+import { ArrayClass } from './constants';
+
 
 @Injectable({
   providedIn: 'root'
@@ -17,19 +19,19 @@ export class ClassService {
         sortStatus.arr.length-1 === sortStatus.i ||
         (idx === sortStatus.i && sortStatus.swap === true)
       ) {
-        clist.push('sorted');
+        clist.push(ArrayClass.sorted);
       }
       // if lowest value found
       else if (sortStatus.low === idx && sortStatus.swap === false) {
-        clist.push('marked')
+        clist.push(ArrayClass.marked)
       }
       else {
-        clist.push('unsorted');
+        clist.push(ArrayClass.unsorted);
       }
 
       // if current
-      if (idx === sortStatus.j && !clist.includes('sorted')) {
-        clist.push('current');
+      if (idx === sortStatus.j && !clist.includes(ArrayClass.sorted)) {
+        clist.push(ArrayClass.current);
       }
 
       // if swapped
@@ -37,7 +39,7 @@ export class ClassService {
         sortStatus.swap === true &&
         [sortStatus.i, sortStatus.low].includes(idx)
       ) {
-        clist.push('swapped');
+        clist.push(ArrayClass.swapped);
       }
       return clist.join(' ');
     });
