@@ -4,10 +4,24 @@
   --animation-time: 1s;
 }
 
+.array-container {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  max-height: 100%;
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.array-container > div {
+  flex: 1;
+  position: relative;
+}
+
 .value {
   border-radius: 2px;
   min-height: 2px;
-  margin-bottom: -1px;
 }
 
 .current {
@@ -20,10 +34,23 @@
   border-width: 0 5px 5px 0;
   display: inline-block;
   padding: 5px;
-  position: relative;
-  bottom: -100%;
+  position: absolute;
   left: 50%;
-  transform: translate(-50%, 20%) rotate(-135deg);
+  bottom: 0%;
+  transform: translate(-50%, 120%) rotate(-135deg);
+}
+
+.negative-value {
+  transform: translate(0, 100%);
+}
+
+.negative-value:after {
+  bottom: 100%;
+}
+
+.zero-value {
+  height: 2px;
+  margin-bottom: -1px;
 }
 
 .sorted {
@@ -46,15 +73,3 @@
 .swapped {
   animation: fadeIn var(--animation-time);
 }
-
-.negative-value {
-  transform: translate(0, 100%);
-  margin-bottom: 1px;
-}
-
-.negative-value:after {
-  top: 0;
-  /* flipping arrow for negative values */
-  /* transform: translate(-50%, -120%) rotate(45deg); */
-}
-

@@ -17,7 +17,7 @@ export class MainViewComponent {
   stepTime: number = DEFAULT_STEP_TIME;
 
   constructor (public sortService: SortService, public classService: ClassService) {
-    this.arr = this.randomArray(8, 10, -5);
+    this.arr = this.randomArray(40, 20, -20);
     const selectionSort = sortService.selectionSortGen(this.arr);
     
     const obs$ = zip(

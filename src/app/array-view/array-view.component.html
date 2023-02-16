@@ -1,11 +1,10 @@
-<div *ngFor="let el of array; let id = index;"
-  [class] = "classList[id]"
-  [ngClass]="{'negative-value': array[id] < 0}"
-  [ngStyle]="{
-    'position': 'absolute',
-    'height.px': arrayConfig.heights[id],
-    'width.px': arrayConfig.width,
-    'left.px': arrayConfig.lefts[id],
-    'bottom.%': arrayConfig.bottom
-  }"
-></div>
+<div class="array-container" [ngStyle]="{'top.%': -top}">
+  <div *ngFor="let val of heights; let id = index;"
+   [ngStyle]="{'height.%': heights[id]}"
+   [class] = "classList[id]"
+   [ngClass]="{
+    'negative-value': array[id] < 0,
+     'zero-value': array[id] === 0
+   }"
+  ></div>
+</div>
