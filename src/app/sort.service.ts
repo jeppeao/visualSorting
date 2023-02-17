@@ -1,4 +1,7 @@
 import { Injectable } from '@angular/core';
+import { from } from 'rxjs'
+import { Sort } from './constants'
+import { SelectionSortStatus } from './constants';
 
 @Injectable({
   providedIn: 'root'
@@ -6,6 +9,11 @@ import { Injectable } from '@angular/core';
 export class SortService {
   
   constructor() { }
+
+  randomArray(length: number, hi: number, lo: number) {
+    return [...Array(length)]
+     .map(() => Math.floor(Math.random()* (hi + 1 - lo)) + lo);
+  }
 
   *selectionSortGen(array: number[]) {
     const arr = [...array]
@@ -27,6 +35,13 @@ export class SortService {
         yield {arr: [...arr], i, j, low, swap: swapped}; 
       }
   
+    }
+  }
+
+  getSort$(type: Sort, arr: number[]) {
+    switch(type) {
+      case Sort.selection:
+        return from(this.selectionSortGen(arr));
     }
   }
 

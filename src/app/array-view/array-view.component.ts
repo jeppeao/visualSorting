@@ -1,5 +1,4 @@
 import { Component, ElementRef, Input, OnChanges } from '@angular/core';
-import { ClassService } from '../class.service';
 
 @Component({
   selector: 'app-array-view',
@@ -8,14 +7,13 @@ import { ClassService } from '../class.service';
 })
 export class ArrayViewComponent implements OnChanges {
 
-  component_height = this.host.nativeElement.clientHeight;
   heights: number[] = [];
   top: number = 0;
   @Input() array: number[] = [];
   @Input() classList: string[] = [];
   @Input() stepTime = 500;
 
-  constructor(private host: ElementRef, public classService: ClassService) {
+  constructor(private host: ElementRef) {
     this.host.nativeElement.style.setProperty(
       '--animation-time', (this.stepTime/1000).toString() + "s"
     );

@@ -15,3 +15,7 @@ export enum ArrayClass {
   marked = 'marked',
   swapped = 'swapped'
 }
+
+export enum Sort {
+  selection = 'selection',
+}

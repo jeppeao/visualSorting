@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SelectionSortStatus } from './constants'
-import { ArrayClass } from './constants';
+import { ArrayClass, Sort } from './constants';
 
 
 @Injectable({
@@ -9,6 +9,13 @@ import { ArrayClass } from './constants';
 export class ClassService {
 
   constructor() { }
+
+  getClass(type: Sort, status: {}) {
+    switch(type) {
+      case (Sort.selection):
+        return this.getSelectionSortClassList(status as SelectionSortStatus);
+    }
+  }
 
   getSelectionSortClassList(sortStatus: SelectionSortStatus): string[] {
     return sortStatus.arr.map((_, idx) => {
