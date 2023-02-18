@@ -1,3 +1,8 @@
+:host {
+  display: flex;
+  justify-content: center;
+  margin-top: 5px;
+}
 app-sort-view {
   width: 400px;
   height: 400px;

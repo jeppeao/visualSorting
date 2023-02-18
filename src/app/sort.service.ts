@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { from } from 'rxjs'
 import { Sort } from './constants'
 import { SelectionSortStatus } from './constants';
 
@@ -34,14 +33,13 @@ export class SortService {
         [arr[i], arr[low]] = [arr[low], arr[i]];
         yield {arr: [...arr], i, j, low, swap: swapped}; 
       }
-  
     }
   }
 
-  getSort$(type: Sort, arr: number[]) {
+  getSorter(type: Sort, arr: number[]) {
     switch(type) {
       case Sort.selection:
-        return from(this.selectionSortGen(arr));
+        return this.selectionSortGen(arr);
     }
   }
 

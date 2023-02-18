@@ -19,6 +19,9 @@ app-array-view {
 }
 
 .sort-bar {
-  height: 10%;
-  background-color: lightseagreen;
+  height: 50px;
+  background-color: #eef;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }

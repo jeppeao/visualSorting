@@ -5,8 +5,8 @@ import { ArrayViewComponent } from './array-view/array-view.component';
 import { MainViewComponent } from './main-view/main-view.component';
 import { SortViewComponent } from './sort-view/sort-view.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
-
+import { MatButtonModule } from '@angular/material/button'
+import { MatIconModule } from '@angular/material/icon'
 
 @NgModule({
   declarations: [
@@ -17,7 +17,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
   ],
   imports: [
     BrowserModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MatButtonModule,
+    MatIconModule
   ],
   providers: [],
   bootstrap: [AppComponent]
