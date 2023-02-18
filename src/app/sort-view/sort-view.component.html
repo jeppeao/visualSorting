@@ -1,14 +1,18 @@
 <div class="container">
   <div class="sort-bar">
-    <button mat-mini-fab (click)="log()">
-      <mat-icon>play_circle_outline</mat-icon>  
+    <button mat-mini-fab (click)="play()">
+      <mat-icon 
+        [ngClass]="{'active-icon': isOn$.value}"
+      >play_circle_outline</mat-icon>  
     </button>
-    <button mat-mini-fab (click)="unlog()">
-      <mat-icon>pause_circle_outline</mat-icon>  
+    <button mat-mini-fab (click)="pause()">
+      <mat-icon
+      [ngClass]="{'active-icon': !isOn$.value}"
+      >pause_circle_outline</mat-icon>  
     </button>
   </div>
   <app-array-view
-    [array]="arr"
+    [array]="currentArray"
     [classList]="classList"
     [stepTime]="stepTime"
   ></app-array-view>

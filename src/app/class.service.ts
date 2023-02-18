@@ -10,7 +10,7 @@ export class ClassService {
 
   constructor() { }
 
-  getClass(type: Sort, status: {}) {
+  getClass(type: Sort, status: {} = {}) {
     switch(type) {
       case (Sort.selection):
         return this.getSelectionSortClassList(status as SelectionSortStatus);

@@ -8,7 +8,7 @@
 app-array-view {
   flex: 1;
   width: 98%;
-  padding: 2% 1% 1% 1%;
+  padding: 2% 2% 2% 1%;
 }
 
 .container {
@@ -24,4 +24,12 @@ app-array-view {
   display: flex;
   align-items: center;
   gap: 5px;
+  padding-left: 5px;
+}
+
+.active-icon {
+}
+
+button {
+  background-color: lightseagreen;
 }

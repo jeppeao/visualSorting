@@ -36,10 +36,10 @@ export class SortService {
     }
   }
 
-  getSorter(type: Sort, arr: number[]) {
+  getSorter(type: Sort) {
     switch(type) {
       case Sort.selection:
-        return this.selectionSortGen(arr);
+        return this.selectionSortGen;
     }
   }
 
