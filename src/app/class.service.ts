@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
-import { SelectionSortStatus, InsertionSortStatus } from './constants'
-import { ArrayClass, Sort } from './constants';
+import { 
+  SelectionSortStatus,
+  InsertionSortStatus,
+  ArrayClass,
+  Sort
+ } from './constants';
 
 
 @Injectable({

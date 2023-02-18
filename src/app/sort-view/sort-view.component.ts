@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { SortService } from '../sort.service';
 import { ClassService } from '../class.service';
 import { DEFAULT_STEP_TIME, Sort } from '../constants';
-import { interval, BehaviorSubject, from, take, zip, filter} from 'rxjs'
+import { interval, BehaviorSubject, from, take, zip, filter, Observable} from 'rxjs'
 import {MAT_TOOLTIP_DEFAULT_OPTIONS, MatTooltipDefaultOptions} from '@angular/material/tooltip';
 
 export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
@@ -24,50 +24,53 @@ export class SortViewComponent {
   stepTime: number = DEFAULT_STEP_TIME;
   // sort: Sort = Sort.selection;
   sort: Sort = Sort.insertion;
-  sorter = this.sortService.getSorter(this.sort);
-  cur$ = this.setupCur$();
+  sorter = this.sortService.getSorter(this.sort, this.array);
   isOn$ = new BehaviorSubject(false);
+  ctrlSubscription = this.newCtrlSubscription();
 
   constructor (public sortService: SortService, public classService: ClassService) {
-    console.log([...this.sorter(this.array)])
-    this.loadInitialState();
+    this.advanceState();
   }
  
-  handleSortState(state: {arr: number[]}) {
-    this.currentArray = state.arr;
-    this.classList = this.classService.getClass(this.sort, state);
+  play() { 
+    this.isOn$.next(true); 
+    this.changeSpeed(this.stepTime / 2);
   }
-
-  play() { this.isOn$.next(true); }
 
   pause() { this.isOn$.next(false); }
 
-  loadInitialState() {
-    from(this.sorter(this.array)).pipe(take(1)).subscribe(s => {
-      this.handleSortState(s);
-    });
-  }
-  
-  setupCur$() {
-    const ctrl$ = interval(this.stepTime).pipe(
-      filter(go => this.isOn$.value === true)
-    );
-  
-    return zip(ctrl$, this.sorter(this.array)).subscribe(s => {
-      this.handleSortState(s[1]); 
-    });
+  newCtrlSubscription() {
+    return interval(this.stepTime).pipe(
+      filter(_ => this.isOn$.value === true)
+    ).subscribe(_ => this.advanceState());
   }
 
   restart() {
     this.pause();
-    this.cur$.unsubscribe();
-    this.cur$ = this.setupCur$();
-    this.loadInitialState();
+    this.ctrlSubscription.unsubscribe();
+    this.ctrlSubscription = this.newCtrlSubscription();
+    this.sorter = this.sortService.getSorter(this.sort, this.array);
+    this.advanceState();
+  }
+
+  changeSpeed(stepTime: number) {
+    this.stepTime = stepTime;
+    this.ctrlSubscription.unsubscribe();
+    this.ctrlSubscription = this.newCtrlSubscription();
   }
 
   onShuffleClick() {
     this.array = this.sortService.shuffleArray(this.array);
     this.restart();
+  }
+
+  advanceState() {
+    const genState = this.sorter.next();
+    if (!genState.done) {
+      const state = genState.value;
+      this.currentArray = state.arr;
+      this.classList = this.classService.getClass(this.sort, state);
+    }
   }
 
 }

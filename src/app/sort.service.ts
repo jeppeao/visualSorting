@@ -59,13 +59,13 @@ export class SortService {
   }
 
   
-  getSorter(type: Sort) {
+  getSorter(type: Sort, array: number[]) {
     switch(type) {
       case Sort.selection:
-        return this.selectionSortGen;
+        return this.selectionSortGen(array);
      
       case Sort.insertion:
-          return this.insertionSortGen;
+          return this.insertionSortGen(array);
     }
   }
 
