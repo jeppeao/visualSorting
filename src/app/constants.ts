@@ -1,14 +1,22 @@
-export const DEFAULT_STEP_TIME = 1;
+export const DEFAULT_STEP_TIME = 500;
 
-export interface SelectionSortStatus {
+export interface SortStatus {
   arr:number[],
   i:number,
   j:number,
+}
+
+export interface SelectionSortStatus extends SortStatus {
   low:number,
   swap: boolean
 }
 
+export interface InsertionSortStatus extends SortStatus {
+  swap: boolean
+}
+
 export enum ArrayClass {
+  value = 'value',
   current = 'current',
   sorted = 'sorted',
   unsorted = 'unsorted',
@@ -18,4 +26,5 @@ export enum ArrayClass {
 
 export enum Sort {
   selection = 'selection',
+  insertion = 'insertion'
 }

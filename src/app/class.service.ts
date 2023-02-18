@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SelectionSortStatus } from './constants'
+import { SelectionSortStatus, InsertionSortStatus } from './constants'
 import { ArrayClass, Sort } from './constants';
 
 
@@ -14,12 +14,16 @@ export class ClassService {
     switch(type) {
       case (Sort.selection):
         return this.getSelectionSortClassList(status as SelectionSortStatus);
+      
+      case (Sort.insertion):
+        return this.getInsertionSortClassList(status as InsertionSortStatus);
+
     }
   }
 
   getSelectionSortClassList(sortStatus: SelectionSortStatus): string[] {
     return sortStatus.arr.map((_, idx) => {
-      const clist =['value'];
+      const clist =[ArrayClass.value];
       // if already sorted
       if (
         idx < sortStatus.i || 
@@ -48,6 +52,35 @@ export class ClassService {
       ) {
         clist.push(ArrayClass.swapped);
       }
+      return clist.join(' ');
+    });
+  }
+
+  getInsertionSortClassList(status: InsertionSortStatus): string[] {
+    return status.arr.map((_, idx) => {
+      const clist =[ArrayClass.value];
+
+      if (idx === status.j) {
+        clist.push(ArrayClass.current);
+      }
+      if (idx === status.j && status.swap === true) {
+        clist.push(ArrayClass.marked);
+      }
+      else if (idx === status.j && idx === status.i) {
+        clist.push(ArrayClass.marked);      
+      }
+      else if (idx === status.j+1 && idx <= status.i && status.swap === false) {
+        clist.push(ArrayClass.marked);
+      }
+      else if (idx <= status.i) {
+        clist.push(ArrayClass.sorted);
+      }
+      else {
+        clist.push(ArrayClass.unsorted)
+      }
+      // if (status.swap === true && [status.j, status.j+1].includes(idx)) {
+      //   clist.push(ArrayClass.swapped);
+      // }
       return clist.join(' ');
     });
   }

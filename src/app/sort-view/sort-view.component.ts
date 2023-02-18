@@ -18,16 +18,18 @@ export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
   providers: [{provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: myCustomTooltipDefaults}],
 })
 export class SortViewComponent {
-  array = this.sortService.randomArray(40, 20, -20);
+  array = this.sortService.randomArray(20, 20, -20);
   currentArray: number[] = this.array;
   classList: string[] = [];
   stepTime: number = DEFAULT_STEP_TIME;
-  sort: Sort = Sort.selection;
+  // sort: Sort = Sort.selection;
+  sort: Sort = Sort.insertion;
   sorter = this.sortService.getSorter(this.sort);
   cur$ = this.setupCur$();
   isOn$ = new BehaviorSubject(false);
 
   constructor (public sortService: SortService, public classService: ClassService) {
+    console.log([...this.sorter(this.array)])
     this.loadInitialState();
   }
  
@@ -64,7 +66,7 @@ export class SortViewComponent {
   }
 
   onShuffleClick() {
-    this.array = this.sortService.randomArray(40, 20, -20);
+    this.array = this.sortService.shuffleArray(this.array);
     this.restart();
   }
 
