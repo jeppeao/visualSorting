@@ -1,7 +1,7 @@
 :host {
   display: block;
   border-radius: 2%;
-  box-shadow: 3px 3px 10px black;
+  box-shadow: 1px 1px 6px black;
   overflow: hidden;
 }
 
@@ -27,9 +27,20 @@ app-array-view {
   padding-left: 5px;
 }
 
-.active-icon {
-}
-
 button {
   background-color: lightseagreen;
+  transform: scale(0.9);
+}
+
+@keyframes activate {
+  0% { color: indigo; }
+  100% { color: white; }
+}
+
+button:focus {
+  animation: activate 0.5s;
+}
+
+button:active {
+  animation: none;
 }
