@@ -1,4 +1,4 @@
-export const DEFAULT_STEP_TIME = 500;
+export const DEFAULT_STEP_TIME = 200;
 
 export interface SortStatus {
   arr:number[],

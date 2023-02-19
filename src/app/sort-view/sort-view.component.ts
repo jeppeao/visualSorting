@@ -25,7 +25,8 @@ export class SortViewComponent {
   currentArray: number[] = this.array;
   classList: string[] = [];
   stepTime: number = DEFAULT_STEP_TIME;
-  sort: Sort = Sort.insertion;
+  sort = Sort.insertion;
+  sortSelect = 'insertion';
   sorter = this.sortService.getSorter(this.sort, this.array);
   isOn$ = new BehaviorSubject(false);
   ctrlSubscription = this.newCtrlSubscription();
@@ -70,12 +71,29 @@ export class SortViewComponent {
     this.restart();
   }
 
+  onSortSelection() {
+    const sel = this.sortSelect;
+    switch(sel) {
+      case 'insertion':
+        this.sort = Sort.insertion;
+        break;
+      case 'selection':
+        this.sort = Sort.selection;
+        break;
+  
+    }
+    this.restart();
+  }
+
   advanceState() {
     const genState = this.sorter.next();
     if (!genState.done) {
       const state = genState.value;
       this.currentArray = state.arr;
       this.classList = this.classService.getClass(this.sort, state);
+    }
+    else {
+      this.pause();
     }
   }
 

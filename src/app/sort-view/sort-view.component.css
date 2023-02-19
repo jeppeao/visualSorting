@@ -24,6 +24,18 @@ button:active {
   animation: none;
 }
 
+mat-option {
+  font-size: 80%;
+}
+
+mat-select {
+  width: 50%;
+}
+
+.select-sort-menu {
+  flex: 1;
+}
+
 .activate {
   animation: activate 0.5s;
 }
@@ -44,9 +56,8 @@ button:active {
   background-color: #eef;
   display: flex;
   align-items: center;
-  gap: 4px;
-  padding-left: 4px;
-  padding-right: 4px;
+  padding-left: 2%;
+  padding-right: 2%;
 }
 
 .button-stack {
@@ -70,8 +81,7 @@ button:active {
 }
 
 .play-button-container .button-stack {
-  margin-left: -10%;
-  margin-right: -20%;
+  margin-left: -2%;
 }
 
 @keyframes activate {
