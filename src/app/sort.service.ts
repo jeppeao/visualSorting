@@ -23,8 +23,8 @@ export class SortService {
   }
 
   *selectionSortGen(array: number[]) {
-    const counts = {swaps: 0, comparisons: 0};
     const arr = [...array]
+    const counts = {swaps: 0, comparisons: 0};
     let i = 0;
     let j = 0;
     let swapped;
@@ -49,35 +49,42 @@ export class SortService {
 
   *insertionSortGen(array: number[]) {
     const arr = [...array];
+    const counts = {swaps: 0, comparisons: 0};
     for (let i=1; i<arr.length; i++) {
       let j = i;
-      yield {arr: [...arr], i, j, swap: false};
+      yield {arr: [...arr], i, j, swap: false, counts};
       for (j=i-1; j>-1 && arr[j+1] < arr[j]; j--) {
-        yield {arr: [...arr], i, j, swap: false};
+        yield {arr: [...arr], i, j, swap: false, counts};
         [arr[j+1], arr[j]] = [arr[j], arr[j+1]];
-        yield {arr: [...arr], i, j, swap: true};
+        counts.comparisons += 1;
+        counts.swaps += 1;
+        yield {arr: [...arr], i, j, swap: true, counts};
       }
+      counts.comparisons += 1;
     }
-    yield {arr: [...arr], i:arr.length, j:arr.length, swap: false};
+    yield {arr: [...arr], i:arr.length, j:arr.length, swap: false, counts};
   }
   
   *bubbleSortGen(array: number[]) {
     const arr = [...array];
+    const counts = {swaps: 0, comparisons: 0};
     let lastUnsorted = arr.length-1;
     while (lastUnsorted > 0) {
       let j = -1; // index of last swap
       let i;
       for (i=1; i<=lastUnsorted; i++) {
-        yield {arr: [...arr], i, j, lastUnsorted, swap: false};
+        yield {arr: [...arr], i, j, lastUnsorted, swap: false, counts};
+        counts.comparisons +=1
         if (arr[i-1] > arr[i]) {
           [arr[i-1], arr[i]] = [arr[i], arr[i-1]];
+          counts.swaps +=1;
           j = i;
-          yield {arr: [...arr], i, j, lastUnsorted, swap: true};
+          yield {arr: [...arr], i, j, lastUnsorted, swap: true, counts};
         }
       }
       lastUnsorted = j - 1;
     }
-    yield {arr: [...arr], i:-1, j:-1, lastUnsorted, swap: false}
+    yield {arr: [...arr], i:-1, j:-1, lastUnsorted, swap: false, counts}
   }
 
 

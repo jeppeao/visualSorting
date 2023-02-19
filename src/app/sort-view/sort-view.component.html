@@ -1,12 +1,19 @@
 <div class="container">
 
   <div class="sort-bar">
+
     <div class="select-sort-menu">
       <mat-select [(value)]="sortSelect" (selectionChange)="onSortSelection()">
         <mat-option value="selection">Selection Sort</mat-option>
         <mat-option value="insertion">Insertion Sort</mat-option>
         <mat-option value="bubble">Bubble Sort</mat-option>
       </mat-select>
+    </div>
+
+
+    <div class="counts-panel">
+      <div>Comparisons: {{counts.comparisons}}</div>
+      <div>Swaps: {{counts.swaps}}</div>
     </div>
      <div class="play-button-container">
       <div *ngIf="isOn$.value === true; else elseBlock">

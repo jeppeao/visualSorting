@@ -4,6 +4,7 @@ export interface SortStatus {
   arr:number[],
   i:number,
   j:number,
+  counts: {swaps: number, comparisons: number}
 }
 
 export interface SelectionSortStatus extends SortStatus {

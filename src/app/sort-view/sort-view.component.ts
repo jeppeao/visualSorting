@@ -24,6 +24,7 @@ export class SortViewComponent {
   array = this.sortService.randomArray(20, 20, -20);
   currentArray: number[] = this.array;
   classList: string[] = [];
+  counts = {comparisons: 0, swaps: 0};
   stepTime: number = DEFAULT_STEP_TIME;
   sort = Sort.insertion;
   sortSelect = 'insertion';
@@ -93,6 +94,7 @@ export class SortViewComponent {
       const state = genState.value;
       this.currentArray = state.arr;
       this.classList = this.classService.getClass(this.sort, state);
+      this.counts = state.counts;
     }
     else {
       this.pause();

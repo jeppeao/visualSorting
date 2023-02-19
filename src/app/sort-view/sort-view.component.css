@@ -25,11 +25,13 @@ button:active {
 }
 
 mat-option {
-  font-size: 80%;
+  font-size: 70%;
+  border-radius: 2%;
+  border: 1px solid lightgrey;
 }
 
 mat-select {
-  width: 50%;
+  font-size: 100%;
 }
 
 .select-sort-menu {
@@ -47,14 +49,21 @@ mat-select {
   flex-direction: column;
 }
 
-.info-panel {
+.counts-panel {
   flex: 1;
+  margin-left: 3%;
+  font-size: 0.9em;
+}
+
+.counts-panel :nth-child(2) {
+  margin-top: -5%;
 }
 
 .sort-bar {
   height: 60px;
   background-color: #eef;
   display: flex;
+  justify-content: space-between;
   align-items: center;
   padding-left: 2%;
   padding-right: 2%;
