@@ -23,6 +23,7 @@ export class SortService {
   }
 
   *selectionSortGen(array: number[]) {
+    const counts = {swaps: 0, comparisons: 0};
     const arr = [...array]
     let i = 0;
     let j = 0;
@@ -34,18 +35,20 @@ export class SortService {
          if (arr[j] < arr[low]) {
           low = j;
         }
-        yield {arr: [...arr], i, j, low, swap: false}
+        counts.comparisons += 1;
+        yield {arr: [...arr], i, j, low, swap: false, counts}
       }
       swapped = low !== i ? true : false;
       if (swapped) {
         [arr[i], arr[low]] = [arr[low], arr[i]];
-        yield {arr: [...arr], i, j, low, swap: swapped}; 
+        counts.swaps +=1;
+        yield {arr: [...arr], i, j, low, swap: swapped, counts}; 
       }
     }
   }
 
   *insertionSortGen(array: number[]) {
-    const arr = [...array]
+    const arr = [...array];
     for (let i=1; i<arr.length; i++) {
       let j = i;
       yield {arr: [...arr], i, j, swap: false};
@@ -57,15 +60,35 @@ export class SortService {
     }
     yield {arr: [...arr], i:arr.length, j:arr.length, swap: false};
   }
-
   
+  *bubbleSortGen(array: number[]) {
+    const arr = [...array];
+    let lastUnsorted = arr.length-1;
+    while (lastUnsorted > 0) {
+      let j = -1; // index of last swap
+      let i;
+      for (i=1; i<=lastUnsorted; i++) {
+        yield {arr: [...arr], i, j, lastUnsorted, swap: false};
+        if (arr[i-1] > arr[i]) {
+          [arr[i-1], arr[i]] = [arr[i], arr[i-1]];
+          j = i;
+          yield {arr: [...arr], i, j, lastUnsorted, swap: true};
+        }
+      }
+      lastUnsorted = j - 1;
+    }
+    yield {arr: [...arr], i:-1, j:-1, lastUnsorted, swap: false}
+  }
+
+
   getSorter(type: Sort, array: number[]) {
     switch(type) {
       case Sort.selection:
         return this.selectionSortGen(array);
-     
       case Sort.insertion:
-          return this.insertionSortGen(array);
+        return this.insertionSortGen(array);
+      case Sort.bubble:
+        return this.bubbleSortGen(array);
     }
   }
 

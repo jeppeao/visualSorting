@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { 
   SelectionSortStatus,
   InsertionSortStatus,
+  BubbleSortStatus,
   ArrayClass,
   Sort
  } from './constants';
@@ -18,10 +19,11 @@ export class ClassService {
     switch(type) {
       case (Sort.selection):
         return this.getSelectionSortClassList(status as SelectionSortStatus);
-      
       case (Sort.insertion):
         return this.getInsertionSortClassList(status as InsertionSortStatus);
-
+      case (Sort.bubble): {
+        return this.getBubbleSortClassList(status as BubbleSortStatus);
+      }
     }
   }
 
@@ -85,6 +87,27 @@ export class ClassService {
       // if (status.swap === true && [status.j, status.j+1].includes(idx)) {
       //   clist.push(ArrayClass.swapped);
       // }
+      return clist.join(' ');
+    });
+  }
+
+    getBubbleSortClassList(status: BubbleSortStatus): string[] {
+    return status.arr.map((_, idx) => {
+      const clist = [ArrayClass.value];
+       
+      if ([status.i, status.i-1].includes(idx) ){
+        clist.push(ArrayClass.current);
+        clist.push(ArrayClass.unsorted);
+        if (status.swap === true) {
+          clist.push(ArrayClass.marked)
+        }
+      }
+      else if (idx > status.lastUnsorted) {
+        clist.push(ArrayClass.sorted);
+      }
+      else {
+        clist.push(ArrayClass.unsorted);
+      }
       return clist.join(' ');
     });
   }

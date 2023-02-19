@@ -58,6 +58,7 @@ export class SortViewComponent {
     this.ctrlSubscription = this.newCtrlSubscription();
     this.sorter = this.sortService.getSorter(this.sort, this.array);
     this.advanceState();
+    this.touched=false;
   }
 
   changeSpeed(stepTime: number) {
@@ -72,14 +73,15 @@ export class SortViewComponent {
   }
 
   onSortSelection() {
-    const sel = this.sortSelect;
-    switch(sel) {
+    switch(this.sortSelect) {
       case 'insertion':
         this.sort = Sort.insertion;
         break;
       case 'selection':
         this.sort = Sort.selection;
         break;
+      case 'bubble':
+        this.sort = Sort.bubble;
   
     }
     this.restart();
