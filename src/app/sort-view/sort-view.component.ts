@@ -15,18 +15,21 @@ export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
   selector: 'app-sort-view',
   templateUrl: './sort-view.component.html',
   styleUrls: ['./sort-view.component.css'],
-  providers: [{provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: myCustomTooltipDefaults}],
+  providers: [{
+    provide: MAT_TOOLTIP_DEFAULT_OPTIONS,
+    useValue: myCustomTooltipDefaults
+  }],
 })
 export class SortViewComponent {
   array = this.sortService.randomArray(20, 20, -20);
   currentArray: number[] = this.array;
   classList: string[] = [];
   stepTime: number = DEFAULT_STEP_TIME;
-  // sort: Sort = Sort.selection;
   sort: Sort = Sort.insertion;
   sorter = this.sortService.getSorter(this.sort, this.array);
   isOn$ = new BehaviorSubject(false);
   ctrlSubscription = this.newCtrlSubscription();
+  touched = false;
 
   constructor (public sortService: SortService, public classService: ClassService) {
     this.advanceState();
@@ -34,10 +37,13 @@ export class SortViewComponent {
  
   play() { 
     this.isOn$.next(true); 
-    this.changeSpeed(this.stepTime / 2);
+    this.touch();
   }
 
   pause() { this.isOn$.next(false); }
+  slower() { this.changeSpeed(this.stepTime*2)}
+  faster() { this.changeSpeed(this.stepTime/2)}
+  touch() { this.touched=true}
 
   newCtrlSubscription() {
     return interval(this.stepTime).pipe(

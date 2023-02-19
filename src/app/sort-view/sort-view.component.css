@@ -11,30 +11,9 @@ app-array-view {
   padding: 2% 2% 2% 1%;
 }
 
-.container {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-.sort-bar {
-  height: 50px;
-  background-color: #eef;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  padding-left: 5px;
-}
-
 button {
   background-color: lightseagreen;
   transform: scale(0.9);
-}
-
-@keyframes activate {
-  0% { color: indigo; }
-  100% { color: white; }
 }
 
 button:focus {
@@ -43,4 +22,64 @@ button:focus {
 
 button:active {
   animation: none;
+}
+
+.activate {
+  animation: activate 0.5s;
+}
+
+.container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.info-panel {
+  flex: 1;
+}
+
+.sort-bar {
+  height: 60px;
+  background-color: #eef;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+.button-stack {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  height: 100%;
+  gap: 4%;
+  margin-top: -4%;
+}
+
+.button-stack>button {
+  height: 100%;
+  width: 100%;
+  transform: scale(0.8);
+}
+
+.play-button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.play-button-container .button-stack {
+  margin-left: -10%;
+  margin-right: -20%;
+}
+
+@keyframes activate {
+  0% {
+    color: indigo;
+  }
+
+  100% {
+    color: white;
+  }
 }
