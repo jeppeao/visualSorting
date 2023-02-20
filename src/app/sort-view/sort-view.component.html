@@ -2,11 +2,15 @@
 
   <div class="sort-bar">
 
+    
     <div class="select-sort-menu">
-      <mat-select [(value)]="sortSelect" (selectionChange)="onSortSelection()">
-        <mat-option value="selection">Selection Sort</mat-option>
-        <mat-option value="insertion">Insertion Sort</mat-option>
-        <mat-option value="bubble">Bubble Sort</mat-option>
+      <div class="select-label">Sort Type</div>
+      <mat-select 
+        [(value)]="sortSelect" 
+        (selectionChange)="onSortSelection()">
+        <mat-option value="selection">Selection</mat-option>
+        <mat-option value="insertion">Insertion</mat-option>
+        <mat-option value="bubble">Bubble</mat-option>
       </mat-select>
     </div>
 

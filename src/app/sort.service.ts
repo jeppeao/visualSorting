@@ -29,13 +29,14 @@ export class SortService {
     let j = 0;
     let swapped;
     let low = 0;
-    for (i=0; i<arr.length; i++) {
+    yield {arr: [...arr], i, j, low, swap: false, counts}
+    for (i=0; i<arr.length-1; i++) {
       low = i;
       for (j=i; j<arr.length; j++) {
          if (arr[j] < arr[low]) {
           low = j;
         }
-        counts.comparisons += 1;
+        counts.comparisons = i===j ? counts.comparisons : counts.comparisons+1;
         yield {arr: [...arr], i, j, low, swap: false, counts}
       }
       swapped = low !== i ? true : false;
@@ -45,6 +46,7 @@ export class SortService {
         yield {arr: [...arr], i, j, low, swap: swapped, counts}; 
       }
     }
+    yield {arr: [...arr], i: i+1, j, low, swap: swapped, counts};
   }
 
   *insertionSortGen(array: number[]) {
@@ -74,7 +76,7 @@ export class SortService {
       let i;
       for (i=1; i<=lastUnsorted; i++) {
         yield {arr: [...arr], i, j, lastUnsorted, swap: false, counts};
-        counts.comparisons +=1
+        counts.comparisons +=1;
         if (arr[i-1] > arr[i]) {
           [arr[i-1], arr[i]] = [arr[i], arr[i-1]];
           counts.swaps +=1;

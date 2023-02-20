@@ -21,7 +21,7 @@ export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
   }],
 })
 export class SortViewComponent {
-  array = this.sortService.randomArray(20, 20, -20);
+  array = this.sortService.randomArray(30, 20, -20);
   currentArray: number[] = this.array;
   classList: string[] = [];
   counts = {comparisons: 0, swaps: 0};

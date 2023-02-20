@@ -32,10 +32,26 @@ mat-option {
 
 mat-select {
   font-size: 100%;
+  border: 2px solid lightseagreen;
+  border-radius: 8px;
+  padding: 1% 4% 0% 4%;
 }
 
 .select-sort-menu {
-  flex: 1;
+  width: 25%;
+  margin-top: -2%;
+}
+
+.select-label {
+  position: relative;
+  font-size: 0.75em;
+  color: grey;
+  left: 10%;
+  margin-bottom: -10%;
+  background-color: #eef;
+  width:fit-content;
+  padding-left: 2%;
+  padding-right: 2%;
 }
 
 .activate {
@@ -51,7 +67,8 @@ mat-select {
 
 .counts-panel {
   flex: 1;
-  margin-left: 3%;
+  margin-left: 5%;
+  margin-top: 1%;
   font-size: 0.9em;
 }
 
