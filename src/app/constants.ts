@@ -29,7 +29,6 @@ export interface HeapSortStatus extends SortStatus {
 
 export interface PermutationSortStatus extends SortStatus {
   done: boolean,
-  info: {}
 }
 
 export enum ArrayClass {

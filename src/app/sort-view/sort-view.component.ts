@@ -21,7 +21,7 @@ export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
   }],
 })
 export class SortViewComponent {
-  array = this.sortService.randomArray(4, 20, -20);
+  array = this.sortService.randomArray(20, 15, -15);
   currentArray: number[] = this.array;
   classList: string[] = [];
   info = [{label: 'comparisons', content: '0'}, {label:'swaps', content:0}];

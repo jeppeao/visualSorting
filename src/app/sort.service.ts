@@ -57,9 +57,9 @@ export class SortService {
       let j = i;
       yield {arr: [...arr], i, j, swap: false, info};
       for (j=i-1; j>-1 && arr[j+1] < arr[j]; j--) {
+        info.comparisons += 1;
         yield {arr: [...arr], i, j, swap: false, info};
         [arr[j+1], arr[j]] = [arr[j], arr[j+1]];
-        info.comparisons += 1;
         info.swaps += 1;
         yield {arr: [...arr], i, j, swap: true, info};
       }
@@ -230,10 +230,10 @@ export class SortService {
     yield {arr: [...arr], i:-1, j:-1, info: {...info}, done: false};
     let stat = nextPerm();
     while(stat.done === false) {
-      yield {...stat, info: {comparisons: 0, swaps: 0}};
+      yield {...stat};
       stat = nextPerm()
     }
-    yield {...stat, info: {comparisons: 0, swaps: 0}};
+    yield {...stat};
   }
 
   getSorter(type: Sort, array: number[]) {

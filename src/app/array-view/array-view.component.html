@@ -1,7 +1,24 @@
-<div class="array-container" [ngStyle]="{'top.%': -top}">
-  <div *ngFor="let val of array; let id = index;"
-   [class] = "classList[id]"
-   [ngClass]="{'negative-value': val < 0, 'zero-value': val === 0}"
-   [ngStyle]="{'height.%': heights[id]}"
-  ></div>
+<div class="container" >
+  <div class="array-container"
+    [ngStyle]="{'height.%': topHeight}">
+    <div *ngFor="let val of array; let id = index;"
+      [class] = "classList[id]"
+      [ngClass]="{'zero-value': val === 0}"
+      [ngStyle]="{
+        'height.%': heights[id] === 0 ? 1 : heights[id],
+        'visibility': array[id] < 0 ? 'hidden' : 'visible'
+      }"
+    ></div>
+  </div>
+  <div class="array-container array-container-neg"
+    [ngStyle]="{'height.%': bottomHeight}">
+    <div *ngFor="let val of array; let id = index;"
+      [class] = "classList[id]"
+      [ngClass]="{'zero-value': val === 0, 'negative-value': true}"
+      [ngStyle]="{
+        'height.%': heights[id] === 0 ? 1 : heights[id],
+        'visibility': array[id] > 0 ? 'hidden' : 'visible'  
+      }"
+    ></div>
+  </div>
 </div>

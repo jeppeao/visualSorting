@@ -8,7 +8,8 @@ import { Component, ElementRef, Input, OnChanges } from '@angular/core';
 export class ArrayViewComponent implements OnChanges {
 
   heights: number[] = [];
-  top: number = 0;
+  topHeight = 50;
+  bottomHeight = 50;
   @Input() array: number[] = [];
   @Input() classList: string[] = [];
   @Input() stepTime = 500;
@@ -29,9 +30,12 @@ export class ArrayViewComponent implements OnChanges {
     const maxVal = Math.max(Math.max(...this.array), 0);
     const minVal = Math.min(Math.min(...this.array), 0);
     const valueSpan = maxVal - minVal;
-    this.top = Math.floor(Math.abs(minVal / valueSpan * 100));
-    this.heights = this.array.map(
-      val => Math.floor(Math.abs(val)/valueSpan * 100)
-    );
+    this.topHeight = Math.abs(maxVal / valueSpan)*100;
+    this.bottomHeight = 100 - this.topHeight;
+    
+    this.heights = this.array.map(val => { 
+      const normal = val < 0 ? minVal : maxVal;
+      return val / normal * 100;
+    });
   }
 }
