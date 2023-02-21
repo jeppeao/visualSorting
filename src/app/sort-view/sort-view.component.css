@@ -65,14 +65,14 @@ mat-select {
   flex-direction: column;
 }
 
-.counts-panel {
+.info-panel {
   flex: 1;
   margin-left: 5%;
   margin-top: 1%;
   font-size: 0.9em;
 }
 
-.counts-panel :nth-child(2) {
+.info-panel :nth-child(2) {
   margin-top: -5%;
 }
 

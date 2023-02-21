@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { SortService } from '../sort.service';
 import { ClassService } from '../class.service';
 import { DEFAULT_STEP_TIME, Sort } from '../constants';
-import { interval, BehaviorSubject, from, take, zip, filter, Observable} from 'rxjs'
-import {MAT_TOOLTIP_DEFAULT_OPTIONS, MatTooltipDefaultOptions} from '@angular/material/tooltip';
+import { interval, BehaviorSubject, filter } from 'rxjs'
+import { MAT_TOOLTIP_DEFAULT_OPTIONS, MatTooltipDefaultOptions} from '@angular/material/tooltip';
 
 export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
   showDelay: 2000,
@@ -21,10 +21,10 @@ export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
   }],
 })
 export class SortViewComponent {
-  array = this.sortService.randomArray(30, 20, -20);
+  array = this.sortService.randomArray(4, 20, -20);
   currentArray: number[] = this.array;
   classList: string[] = [];
-  counts = {comparisons: 0, swaps: 0};
+  info = [{label: 'comparisons', content: '0'}, {label:'swaps', content:0}];
   stepTime: number = DEFAULT_STEP_TIME;
   sort = Sort.insertion;
   sortSelect = 'insertion';
@@ -43,9 +43,9 @@ export class SortViewComponent {
   }
 
   pause() { this.isOn$.next(false); }
-  slower() { this.changeSpeed(this.stepTime*2)}
-  faster() { this.changeSpeed(this.stepTime/2)}
-  touch() { this.touched=true}
+  slower() { this.changeSpeed(this.stepTime*2) }
+  faster() { this.changeSpeed(this.stepTime/2) }
+  touch() { this.touched=true }
 
   newCtrlSubscription() {
     return interval(this.stepTime).pipe(
@@ -83,13 +83,23 @@ export class SortViewComponent {
         break;
       case 'bubble':
         this.sort = Sort.bubble;
-        break
+        break;
       case 'heap':
         this.sort = Sort.heap;
-        break
+        break;
+      case 'permutation':
+        this.sort = Sort.permutation;
   
     }
     this.restart();
+  }
+
+  processInfo(info:{[key: string]: string}) {
+    const msgs = [];
+    for (let label of Object.keys(info)) {
+      msgs.push({label, content: info[label]})
+    }
+    return msgs;
   }
 
   advanceState() {
@@ -98,7 +108,7 @@ export class SortViewComponent {
       const state = genState.value;
       this.currentArray = state.arr;
       this.classList = this.classService.getClass(this.sort, state);
-      this.counts = state.counts;
+      this.info = this.processInfo(state.info);
     }
     else {
       this.pause();

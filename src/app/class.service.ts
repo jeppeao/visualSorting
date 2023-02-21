@@ -5,7 +5,8 @@ import {
   BubbleSortStatus,
   ArrayClass,
   Sort,
-  HeapSortStatus
+  HeapSortStatus,
+  PermutationSortStatus
  } from './constants';
 
 
@@ -26,6 +27,8 @@ export class ClassService {
         return this.getBubbleSortClassList(status as BubbleSortStatus);
       case (Sort.heap): 
         return this.getHeapSortClassList(status as HeapSortStatus);
+      case (Sort.permutation):
+        return this.getPermutationSortClassList(status as PermutationSortStatus);
     }
   }
 
@@ -138,6 +141,26 @@ export class ClassService {
       else {
         clist.push(ArrayClass.unsorted)
       }
+      return clist.join(' ');
+    });
+  }
+
+  getPermutationSortClassList(status: PermutationSortStatus): string[] {
+    return status.arr.map((_, idx) => {
+      const clist = [ArrayClass.value];
+      
+      if (status.done === false) {
+        clist.push(ArrayClass.unsorted);
+      }
+
+      if (status.done === false && [status.i-1, status.j].includes(idx)) {
+        clist.push(ArrayClass.marked);
+      }
+
+      if (status.done === true) {
+        clist.push(ArrayClass.sorted);
+      }
+
       return clist.join(' ');
     });
   }
