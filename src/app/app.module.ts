@@ -10,6 +10,7 @@ import { MatIconModule } from '@angular/material/icon'
 import { MatTooltipModule } from '@angular/material/tooltip'; 
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { MatSelectModule } from '@angular/material/select';
     MatIconModule,
     MatTooltipModule,
     MatFormFieldModule,
-    MatSelectModule
+    MatSelectModule,
+    MatToolbarModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

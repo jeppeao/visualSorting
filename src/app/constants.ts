@@ -18,7 +18,13 @@ export interface InsertionSortStatus extends SortStatus {
 
 export interface BubbleSortStatus extends SortStatus {
   swap: boolean,
-  lastUnsorted: number;
+  lastUnsorted: number
+}
+
+export interface HeapSortStatus extends SortStatus {
+  swap: boolean,
+  last: number,
+  heap: boolean
 }
 
 export enum ArrayClass {
@@ -34,4 +40,5 @@ export enum Sort {
   selection = 'selection',
   insertion = 'insertion',
   bubble = 'bubble',
+  heap = 'heap'
 }

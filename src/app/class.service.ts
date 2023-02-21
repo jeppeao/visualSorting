@@ -4,7 +4,8 @@ import {
   InsertionSortStatus,
   BubbleSortStatus,
   ArrayClass,
-  Sort
+  Sort,
+  HeapSortStatus
  } from './constants';
 
 
@@ -21,9 +22,10 @@ export class ClassService {
         return this.getSelectionSortClassList(status as SelectionSortStatus);
       case (Sort.insertion):
         return this.getInsertionSortClassList(status as InsertionSortStatus);
-      case (Sort.bubble): {
+      case (Sort.bubble): 
         return this.getBubbleSortClassList(status as BubbleSortStatus);
-      }
+      case (Sort.heap): 
+        return this.getHeapSortClassList(status as HeapSortStatus);
     }
   }
 
@@ -84,9 +86,6 @@ export class ClassService {
       else {
         clist.push(ArrayClass.unsorted)
       }
-      // if (status.swap === true && [status.j, status.j+1].includes(idx)) {
-      //   clist.push(ArrayClass.swapped);
-      // }
       return clist.join(' ');
     });
   }
@@ -107,6 +106,37 @@ export class ClassService {
       }
       else {
         clist.push(ArrayClass.unsorted);
+      }
+      return clist.join(' ');
+    });
+  }
+
+  getHeapSortClassList(status: HeapSortStatus): string[] {
+    return status.arr.map((_, idx) => {
+      const clist = [ArrayClass.value];
+      
+      if (status.heap === false && status.last === idx) {
+        clist.push(ArrayClass.current);
+      }
+      else if (status.heap === true && status.swap === true && status.j === idx) {
+        clist.push(ArrayClass.current);
+      }
+      else if (status.heap === true && status.swap === false && status.i === idx) {
+        clist.push(ArrayClass.current);
+      }
+
+      if (status.swap === true && [status.j, status.i].includes(idx)) {
+        if (status.j !== status.i) clist.push(ArrayClass.marked);
+      }
+      if (status.swap === false && [status.j].includes(idx)) {
+        clist.push(ArrayClass.marked);
+      }
+
+      if (status.heap === true && status.last < idx) {
+        clist.push(ArrayClass.sorted);
+      }
+      else {
+        clist.push(ArrayClass.unsorted)
       }
       return clist.join(' ');
     });

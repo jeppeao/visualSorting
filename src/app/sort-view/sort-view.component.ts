@@ -83,6 +83,10 @@ export class SortViewComponent {
         break;
       case 'bubble':
         this.sort = Sort.bubble;
+        break
+      case 'heap':
+        this.sort = Sort.heap;
+        break
   
     }
     this.restart();
