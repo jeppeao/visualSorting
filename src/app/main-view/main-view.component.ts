@@ -22,7 +22,6 @@ export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
 export class MainViewComponent implements OnInit{
 
   @ViewChild(SortHostDirective, {static: true}) sortHost!: SortHostDirective;
-  sortViewComponents: ComponentRef<SortViewComponent>[] = [];
   isOn$ = new BehaviorSubject(false);
   defaultSpeed = 'Standard';
   selectedSpeed = 200;
@@ -30,27 +29,17 @@ export class MainViewComponent implements OnInit{
   ngOnInit() {
     this.loadComponent();
     this.loadComponent();
-    setTimeout(()=> {
-      this.deleteComponent(1);
-      
-    }, 1000)
   }
 
   loadComponent() {
     const viewContainerRef = this.sortHost.viewContainerRef;
     const componentRef = viewContainerRef.createComponent(SortViewComponent);
     componentRef.instance.globalIsOn$ = this.isOn$;
-    this.sortViewComponents.push(componentRef);
+    componentRef.instance.destroySelf = () => componentRef.destroy();
     // (componentRef.location.nativeElement as HTMLElement).style.width = '500px';
 
   }
 
-  deleteComponent(index: number) {
-    const delId = this.sortHost.viewContainerRef.indexOf(
-      this.sortViewComponents[index].hostView);
-    this.sortHost.viewContainerRef.remove(delId);
-  }
-  
   play() {
     this.isOn$.next(true);
   }
@@ -60,6 +49,10 @@ export class MainViewComponent implements OnInit{
 
   onSpeedSelection(sel: String) {
     // this.selectedSpeed = speed;
+  }
+
+  onDeleteAll() {
+    this.sortHost.viewContainerRef.clear();
   }
 }
 

@@ -26,11 +26,13 @@ button:active {
   animation: none;
 }
 
-/* .play-button-container > div > button,
-.play-button-container > button,
-.sort-bar > button {
-  background-color: lightseagreen;
-} */
+#menu-btn:active {
+  animation: activate 0.5s;
+}
+
+#menu-btn:not(:active) {
+  animation: none;
+}
 
 mat-option {
   font-size: 80%;
@@ -125,7 +127,6 @@ mat-select {
   0% {
     color: indigo;
   }
-
   100% {
     color: white;
   }

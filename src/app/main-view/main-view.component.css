@@ -1,8 +1,10 @@
+mat-toolbar {
+  height: 60px;
+}
 
 mat-icon {
   transform: scale(1.4);
 }
-
 
 #control-row {
   width: 100%;
@@ -12,7 +14,14 @@ mat-icon {
 }
 
 .sort-view-container {
+  height: calc(100% - 60px);
+  max-width: 100%;
+  max-height: 95%;
   display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  justify-content: center;
+  margin: 5px;
 }
 
 .select-menu {
@@ -43,4 +52,21 @@ mat-select {
   display: flex;
   align-items: center;
   height: 30px;
+}
+
+button:focus {
+  animation: activate 0.5s;
+}
+
+button:active {
+  animation: none;
+}
+
+@keyframes activate {
+  0% {
+    color: indigo;
+  }
+  100% {
+    color: white;
+  }
 }

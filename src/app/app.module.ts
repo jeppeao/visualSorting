@@ -13,6 +13,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatMenuModule } from '@angular/material/menu';
 import { SortHostDirective } from './sort-host.directive';
+import { SortService } from './sort.service';
+import { ClassService } from './class.service';
+import { SorterService } from './sorter.service';
 
 @NgModule({
   declarations: [
@@ -33,7 +36,11 @@ import { SortHostDirective } from './sort-host.directive';
     MatToolbarModule,
     MatMenuModule,
   ],
-  providers: [],
+  providers: [
+    SortService,
+    ClassService,
+    SorterService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

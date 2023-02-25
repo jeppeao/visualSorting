@@ -1,9 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { SortService } from '../sort.service';
 import { ClassService } from '../class.service';
-import { DEFAULT_STEP_TIME, Sort } from '../constants';
+import { DEFAULT_STEP_TIME, Sort, SorterStatus } from '../constants';
 import { interval, BehaviorSubject, filter } from 'rxjs'
 import { MAT_TOOLTIP_DEFAULT_OPTIONS, MatTooltipDefaultOptions} from '@angular/material/tooltip';
+import { SorterService } from '../sorter.service';
 
 export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
   showDelay: 2000,
@@ -15,30 +16,33 @@ export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
   selector: 'app-sort-view',
   templateUrl: './sort-view.component.html',
   styleUrls: ['./sort-view.component.css'],
-  providers: [{
+  providers: [
+    SorterService,
+    {
     provide: MAT_TOOLTIP_DEFAULT_OPTIONS,
     useValue: myCustomTooltipDefaults
-  }],
+  }
+ ],
 })
 export class SortViewComponent implements OnInit {
-  array = this.sortService.randomArray(6, 15, -15);
-  currentArray: number[] = this.array;
-  classList: string[] = [];
-  info = [{label: 'comparisons', content: '0'}, {label:'swaps', content:0}];
+
+  @Input() globalIsOn$!: BehaviorSubject<boolean>;
+  @Input() destroySelf: () => void = () => {};
+
   stepTime: number = DEFAULT_STEP_TIME;
   sort = Sort.insertion;
   sortSelect = 'insertion';
-  sorter = this.sortService.getSorter(this.sort, this.array);
-  isOn$ = new BehaviorSubject(false);
-  ctrlSubscription = this.newCtrlSubscription();
+  sorterStatus!: SorterStatus;
   touched = false;
-  @Input() globalIsOn$!: BehaviorSubject<boolean>;
+  ctrlSubscription = this.newCtrlSubscription();
+  isOn$ = new BehaviorSubject(false);
 
-  constructor (public sortService: SortService, public classService: ClassService) {}
+  constructor (private sorterService: SorterService) { }
  
   ngOnInit(): void {
     this.globalIsOn$.subscribe(this.isOn$);
-    this.advanceState();
+    this.sorterService.defineSorter(this.sort);
+    this.sorterStatus = this.sorterService.getNext();
   }
 
   play() { 
@@ -54,15 +58,15 @@ export class SortViewComponent implements OnInit {
   newCtrlSubscription() {
     return interval(this.stepTime).pipe(
       filter(_ => this.isOn$.value === true)
-    ).subscribe(_ => this.advanceState());
+    ).subscribe(_ => this.sorterStatus = this.sorterService.getNext());
   }
 
   restart() {
     this.pause();
     this.ctrlSubscription.unsubscribe();
     this.ctrlSubscription = this.newCtrlSubscription();
-    this.sorter = this.sortService.getSorter(this.sort, this.array);
-    this.advanceState();
+    this.sorterService.restart();
+    this.sorterStatus = this.sorterService.getNext()
     this.touched=false;
   }
 
@@ -73,50 +77,33 @@ export class SortViewComponent implements OnInit {
   }
 
   onShuffleClick() {
-    this.array = this.sortService.shuffleArray(this.array);
+    this.sorterService.shuffle();
     this.restart();
   }
 
   onSortSelection() {
+    let type: Sort;
     switch(this.sortSelect) {
       case 'insertion':
-        this.sort = Sort.insertion;
+        type = Sort.insertion;
         break;
       case 'selection':
-        this.sort = Sort.selection;
+        type = Sort.selection;
         break;
       case 'bubble':
-        this.sort = Sort.bubble;
+        type = Sort.bubble;
         break;
       case 'heap':
-        this.sort = Sort.heap;
+        type = Sort.heap;
         break;
       case 'permutation':
-        this.sort = Sort.permutation;
-  
+        type = Sort.permutation;
+        break
+      default:
+        type = Sort.insertion;
     }
+    this.sorterService.setSortType(type);
     this.restart();
-  }
-
-  processInfo(info:{[key: string]: string}) {
-    const msgs = [];
-    for (let label of Object.keys(info)) {
-      msgs.push({label, content: info[label]})
-    }
-    return msgs;
-  }
-
-  advanceState() {
-    const genState = this.sorter.next();
-    if (!genState.done) {
-      const state = genState.value;
-      this.currentArray = state.arr;
-      this.classList = this.classService.getClass(this.sort, state);
-      this.info = this.processInfo(state.info);
-    }
-    else {
-      this.pause();
-    }
   }
 
 }

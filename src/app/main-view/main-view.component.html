@@ -1,23 +1,19 @@
+
 <mat-toolbar color="primary">
   <mat-toolbar-row>
     <span>Visualize Sorting</span>
 
     <div id="control-row">
-      <div *ngIf="isOn$.value === true; else elseBlock">
-        <button mat-mini-fab 
-          matTooltip="Pause"
-          (click)="pause()"
-          [ngClass]="{ 'activate': true }"
-          ><mat-icon>pause_circle_outline</mat-icon>  
-        </button>
-      </div>
-      <ng-template #elseBlock>
         <button mat-mini-fab 
           (click)="play()"
           matTooltip="Play all"
           ><mat-icon >play_circle_outline</mat-icon>  
         </button>
-      </ng-template>
+        <button mat-mini-fab 
+          matTooltip="Pause"
+          (click)="pause()"
+          ><mat-icon>pause_circle_outline</mat-icon>  
+        </button>
 
       <div class="select-menu">
         <div class="select-label">Set Global Speed</div>
@@ -40,8 +36,15 @@
         </mat-select>
       </div>
 
-      <button mat-mini-fab matTooltip="Reset all">
+      <button mat-mini-fab 
+        matTooltip="Reset all">
         <mat-icon>replay</mat-icon>  
+      </button>
+      <button mat-mini-fab 
+        matTooltip="Delete all"
+        (click)="onDeleteAll()"
+        >
+        <mat-icon>delete_outline</mat-icon>  
       </button>
     </div>
   </mat-toolbar-row>
