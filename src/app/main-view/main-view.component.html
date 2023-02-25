@@ -37,7 +37,10 @@
       </div>
 
       <button mat-mini-fab 
-        matTooltip="Reset all">
+        #reset
+        matTooltip="Reset all"
+        (click)="emitGlobalReset()"
+        >
         <mat-icon>replay</mat-icon>  
       </button>
       <button mat-mini-fab 

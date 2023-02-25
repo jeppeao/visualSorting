@@ -16,7 +16,7 @@ export class ArrayViewComponent implements OnChanges {
 
   constructor(private host: ElementRef) {
     this.host.nativeElement.style.setProperty(
-      '--animation-time', (this.stepTime/1000).toString() + "s"
+      '--animation-time', (this.stepTime / 1000).toString() + "s"
     );
   }
 
@@ -24,16 +24,17 @@ export class ArrayViewComponent implements OnChanges {
     if (this.array) {
       this.configArray();
     }
+    console.log(this.host.nativeElement.clientHeight)
   }
 
   configArray() {
     const maxVal = Math.max(Math.max(...this.array), 0);
     const minVal = Math.min(Math.min(...this.array), 0);
     const valueSpan = maxVal - minVal;
-    this.topHeight = Math.abs(maxVal / valueSpan)*100;
+    this.topHeight = Math.abs(maxVal / valueSpan) * 100;
     this.bottomHeight = 100 - this.topHeight;
-    
-    this.heights = this.array.map(val => { 
+
+    this.heights = this.array.map(val => {
       const normal = val < 0 ? minVal : maxVal;
       return val / normal * 100;
     });

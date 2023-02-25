@@ -8,7 +8,7 @@ import { Sort } from './constants';
 @Injectable()
 export class SorterService {
 
-  initialArray: number[] = this.sortService.randomArray(6, 15, -15);
+  initialArray: number[] = this.sortService.randomArray(25, 15, -15);
   sortType: Sort = {} as Sort;
   sorter: Generator = {} as Generator;
   SorterStatus = {} as SorterStatus;  

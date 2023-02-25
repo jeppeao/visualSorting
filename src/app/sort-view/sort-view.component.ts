@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { SortService } from '../sort.service';
 import { ClassService } from '../class.service';
 import { DEFAULT_STEP_TIME, Sort, SorterStatus } from '../constants';
-import { interval, BehaviorSubject, filter } from 'rxjs'
+import { interval, BehaviorSubject, filter, Observable, Subscription } from 'rxjs'
 import { MAT_TOOLTIP_DEFAULT_OPTIONS, MatTooltipDefaultOptions} from '@angular/material/tooltip';
 import { SorterService } from '../sorter.service';
 
@@ -27,6 +27,7 @@ export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
 export class SortViewComponent implements OnInit {
 
   @Input() globalIsOn$!: BehaviorSubject<boolean>;
+  @Input() globalReset$!: Observable<void>;
   @Input() destroySelf: () => void = () => {};
 
   stepTime: number = DEFAULT_STEP_TIME;
@@ -43,6 +44,7 @@ export class SortViewComponent implements OnInit {
     this.globalIsOn$.subscribe(this.isOn$);
     this.sorterService.defineSorter(this.sort);
     this.sorterStatus = this.sorterService.getNext();
+    this.globalReset$.subscribe(() => this.restart());
   }
 
   play() { 
