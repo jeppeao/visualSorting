@@ -3,6 +3,9 @@
   border-radius: 2%;
   box-shadow: 1px 1px 6px black;
   overflow: hidden;
+  --mat-color-indigo: #3F51B5;
+  --mat-color-pink: #E91E63;
+  --primary: var(--mat-color-indigo);
 }
 
 app-array-view {
@@ -11,8 +14,7 @@ app-array-view {
   padding: 2% 2% 2% 1%;
 }
 
-button {
-  background-color: lightseagreen;
+button {  
   transform: scale(0.9);
 }
 
@@ -24,22 +26,32 @@ button:active {
   animation: none;
 }
 
+/* .play-button-container > div > button,
+.play-button-container > button,
+.sort-bar > button {
+  background-color: lightseagreen;
+} */
+
 mat-option {
-  font-size: 70%;
+  font-size: 80%;
   border-radius: 2%;
   border: 1px solid lightgrey;
 }
 
 mat-select {
-  font-size: 100%;
-  border: 2px solid lightseagreen;
+  font-size: 110%;
+  border: 2px solid var(--primary);
   border-radius: 8px;
   padding: 1% 4% 0% 4%;
+  height: 30px;
+  display: flex;
+  align-items: center;
 }
 
 .select-sort-menu {
   width: 25%;
-  margin-top: -2%;
+  max-width: 120px;
+  margin-top: -8px;
 }
 
 .select-label {
@@ -47,7 +59,7 @@ mat-select {
   font-size: 0.75em;
   color: grey;
   left: 10%;
-  margin-bottom: -10%;
+  margin-bottom: -10px;
   background-color: #eef;
   width:fit-content;
   padding-left: 2%;
@@ -68,12 +80,11 @@ mat-select {
 .info-panel {
   flex: 1;
   margin-left: 5%;
-  margin-top: 1%;
   font-size: 0.9em;
 }
 
 .info-panel :nth-child(2) {
-  margin-top: -5%;
+  margin-top: -5px;
 }
 
 .sort-bar {

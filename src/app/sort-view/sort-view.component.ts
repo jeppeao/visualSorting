@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { SortService } from '../sort.service';
 import { ClassService } from '../class.service';
 import { DEFAULT_STEP_TIME, Sort } from '../constants';
@@ -20,8 +20,8 @@ export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
     useValue: myCustomTooltipDefaults
   }],
 })
-export class SortViewComponent {
-  array = this.sortService.randomArray(20, 15, -15);
+export class SortViewComponent implements OnInit {
+  array = this.sortService.randomArray(6, 15, -15);
   currentArray: number[] = this.array;
   classList: string[] = [];
   info = [{label: 'comparisons', content: '0'}, {label:'swaps', content:0}];
@@ -32,11 +32,15 @@ export class SortViewComponent {
   isOn$ = new BehaviorSubject(false);
   ctrlSubscription = this.newCtrlSubscription();
   touched = false;
+  @Input() globalIsOn$!: BehaviorSubject<boolean>;
 
-  constructor (public sortService: SortService, public classService: ClassService) {
+  constructor (public sortService: SortService, public classService: ClassService) {}
+ 
+  ngOnInit(): void {
+    this.globalIsOn$.subscribe(this.isOn$);
     this.advanceState();
   }
- 
+
   play() { 
     this.isOn$.next(true); 
     this.touch();

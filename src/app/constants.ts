@@ -31,6 +31,18 @@ export interface PermutationSortStatus extends SortStatus {
   done: boolean,
 }
 
+export interface InfoItem {
+  label: string;
+  content: string;
+}
+
+export interface SorterStatus {
+  arr: number[];
+  classList: string[];
+  info: InfoItem[];
+  done: boolean;
+}
+
 export enum ArrayClass {
   value = 'value',
   current = 'current',

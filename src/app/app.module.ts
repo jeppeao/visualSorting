@@ -11,13 +11,16 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatMenuModule } from '@angular/material/menu';
+import { SortHostDirective } from './sort-host.directive';
 
 @NgModule({
   declarations: [
     AppComponent,
     ArrayViewComponent,
     MainViewComponent,
-    SortViewComponent
+    SortViewComponent,
+    SortHostDirective
   ],
   imports: [
     BrowserModule,
@@ -28,6 +31,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     MatFormFieldModule,
     MatSelectModule,
     MatToolbarModule,
+    MatMenuModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -87,7 +87,7 @@ export class SortService {
       }
       lastUnsorted = j - 1;
     }
-    yield {arr: [...arr], i:-1, j:-1, lastUnsorted, swap: false, info}
+    yield {arr: [...arr], i:-1, j:-1, lastUnsorted:-1, swap: false, info}
   }
 
   // Consider array as a binary tree max-heap
@@ -250,5 +250,4 @@ export class SortService {
         return this.permutationSortGen(array);
     }
   }
-
 }

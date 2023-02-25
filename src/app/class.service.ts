@@ -9,7 +9,6 @@ import {
   PermutationSortStatus
  } from './constants';
 
-
 @Injectable({
   providedIn: 'root'
 })
@@ -127,14 +126,12 @@ export class ClassService {
       else if (status.heap === true && status.swap === false && status.i === idx) {
         clist.push(ArrayClass.current);
       }
-
       if (status.swap === true && [status.j, status.i].includes(idx)) {
         if (status.j !== status.i) clist.push(ArrayClass.marked);
       }
       if (status.swap === false && [status.j].includes(idx)) {
         clist.push(ArrayClass.marked);
       }
-
       if (status.heap === true && status.last < idx) {
         clist.push(ArrayClass.sorted);
       }
@@ -152,15 +149,12 @@ export class ClassService {
       if (status.done === false) {
         clist.push(ArrayClass.unsorted);
       }
-
       if (status.done === false && [status.i-1, status.j].includes(idx)) {
         clist.push(ArrayClass.marked);
       }
-
       if (status.done === true) {
         clist.push(ArrayClass.sorted);
       }
-
       return clist.join(' ');
     });
   }
