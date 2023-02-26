@@ -25,13 +25,11 @@ export class MainViewComponent implements OnInit{
   @ViewChild('reset') reset: ElementRef = {} as ElementRef;
   isOn$ = new BehaviorSubject(false);
   reset$: Subject<void> = new Subject<void>();
+  speed$: Subject<number> = new Subject<number>();
   
   defaultSpeed = 'Standard';
-  selectedSpeed = 200;
 
   ngOnInit() {
-    this.loadComponent();
-    this.loadComponent();
     this.loadComponent();
     this.loadComponent();
   }
@@ -41,6 +39,7 @@ export class MainViewComponent implements OnInit{
     const componentRef = viewContainerRef.createComponent(SortViewComponent);
     componentRef.instance.globalIsOn$ = this.isOn$;
     componentRef.instance.globalReset$ = this.reset$;
+    componentRef.instance.globalSpeed$ = this.speed$;
     componentRef.instance.destroySelf = () => componentRef.destroy();
     // (componentRef.location.nativeElement as HTMLElement).style.width = '500px';
 
@@ -49,12 +48,9 @@ export class MainViewComponent implements OnInit{
   play() {
     this.isOn$.next(true);
   }
+
   pause() {
     this.isOn$.next(false);
-  }
-
-  onSpeedSelection(sel: String) {
-    // this.selectedSpeed = speed;
   }
 
   onDeleteAll() {
@@ -63,6 +59,27 @@ export class MainViewComponent implements OnInit{
 
   emitGlobalReset() {
     this.reset$.next();
+  }
+
+  emitGlobalSpeed(speed: string) {
+    this.speed$.next(this.speedToMs(speed));
+  }
+
+  speedToMs(speed: string) {
+    switch(speed) {
+      case 'Slower':
+        return 2000;
+      case 'Slow':
+        return 1000;
+      case 'Fast':
+        return 100;
+      case 'Faster':
+        return 25;
+      case 'Fastest':
+        return 1;
+      default:
+        return 500;
+    }
   }
 }
 

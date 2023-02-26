@@ -19,7 +19,7 @@
         <div class="select-label">Set Global Speed</div>
         <mat-select #sel
         [(value)]="defaultSpeed" 
-        (selectionChange)="onSpeedSelection"
+        (selectionChange)="emitGlobalSpeed(sel.value)"
          >
           <mat-select-trigger>
             <span [ngStyle]="{
@@ -33,6 +33,7 @@
           <mat-option value="Standard">Standard</mat-option>
           <mat-option value="Fast">Fast</mat-option>
           <mat-option value="Faster">Faster</mat-option>
+          <mat-option value="Fastest">Fastest</mat-option>
         </mat-select>
       </div>
 

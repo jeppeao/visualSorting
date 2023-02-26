@@ -28,6 +28,7 @@ export class SortViewComponent implements OnInit {
 
   @Input() globalIsOn$!: BehaviorSubject<boolean>;
   @Input() globalReset$!: Observable<void>;
+  @Input() globalSpeed$!: Observable<number>;
   @Input() destroySelf: () => void = () => {};
 
   stepTime: number = DEFAULT_STEP_TIME;
@@ -45,6 +46,10 @@ export class SortViewComponent implements OnInit {
     this.sorterService.defineSorter(this.sort);
     this.sorterStatus = this.sorterService.getNext();
     this.globalReset$.subscribe(() => this.restart());
+    this.globalSpeed$.subscribe((speed) => {
+      console.log(speed)
+      this.changeSpeed(speed);
+    });
   }
 
   play() { 

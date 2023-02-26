@@ -24,7 +24,6 @@ export class ArrayViewComponent implements OnChanges {
     if (this.array) {
       this.configArray();
     }
-    console.log(this.host.nativeElement.clientHeight)
   }
 
   configArray() {
