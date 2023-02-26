@@ -95,7 +95,7 @@ export class SortService {
   // and parent at pos Math.floor((n-1)/2)
   *heapSortGen(array:number[]) {
     const arr = [...array];
-    const info = {comparisons: 0, swaps: 0};
+    const info = {swaps: 0, comparisons: 0};
     // Helper function siftDown considers subtree with position n as root
     // forms a max heap from subtree by sifting element n into position 
     // assuming subtrees of this root-n-subtree are already max-heaps
@@ -197,7 +197,7 @@ export class SortService {
   // 7. Go to step 1
   *permutationSortGen(array: number[]) {
     let arr = [...array];
-    const info = {comparisons: 0, swaps: 0};
+    const info = {swaps: 0, comparisons: 0};
 
     const nextPerm = () => {
       let i = arr.length - 1;

@@ -46,10 +46,7 @@ export class SortViewComponent implements OnInit {
     this.sorterService.defineSorter(this.sort);
     this.sorterStatus = this.sorterService.getNext();
     this.globalReset$.subscribe(() => this.restart());
-    this.globalSpeed$.subscribe((speed) => {
-      console.log(speed)
-      this.changeSpeed(speed);
-    });
+    this.globalSpeed$.subscribe((speed) => this.changeSpeed(speed));
   }
 
   play() { 

@@ -16,6 +16,9 @@ import { SortHostDirective } from './sort-host.directive';
 import { SortService } from './sort.service';
 import { ClassService } from './class.service';
 import { SorterService } from './sorter.service';
+import { OverlayModule } from '@angular/cdk/overlay'; 
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
   declarations: [
@@ -35,6 +38,9 @@ import { SorterService } from './sorter.service';
     MatSelectModule,
     MatToolbarModule,
     MatMenuModule,
+    OverlayModule,
+    ReactiveFormsModule,
+    MatInputModule,
   ],
   providers: [
     SortService,

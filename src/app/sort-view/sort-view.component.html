@@ -86,6 +86,41 @@
       <span>Delete</span>  
     </button>
     </mat-menu>
+
+    <button mat-mini-fab
+      id = "menu-long-btn"
+      [matMenuTriggerFor]="menuLong" 
+      matTooltip="More Options"
+      color="primary">
+      <mat-icon>more_horiz</mat-icon>  
+    </button>
+    <mat-menu #menuLong="matMenu">
+      <button mat-menu-item
+        (click)="play()"
+        ><mat-icon >play_circle_outline</mat-icon>  
+        <span>Play</span>  
+      </button>
+      <button mat-menu-item
+        (click)="pause()"
+        ><mat-icon>pause_circle_outline</mat-icon>  
+        <span>Pause</span>  
+      </button>
+      <button mat-menu-item
+        (click)="restart()"
+        ><mat-icon>replay</mat-icon>  
+        <span>Restart</span>  
+      </button>
+      <button mat-menu-item
+        (click)="onShuffleClick()"
+        ><mat-icon>shuffle</mat-icon>
+        <span>Shuffle</span>  
+      </button>
+      <button mat-menu-item
+        (click)="destroySelf()"
+        ><mat-icon>delete_outline</mat-icon>
+        <span>Delete</span>  
+      </button>
+    </mat-menu>
   </div>
   
   <app-array-view

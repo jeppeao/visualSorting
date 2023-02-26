@@ -41,14 +41,60 @@
         #reset
         matTooltip="Reset all"
         (click)="emitGlobalReset()"
-        >
-        <mat-icon>replay</mat-icon>  
+        ><mat-icon>replay</mat-icon>  
       </button>
       <button mat-mini-fab 
         matTooltip="Delete all"
         (click)="onDeleteAll()"
-        >
-        <mat-icon>delete_outline</mat-icon>  
+        ><mat-icon>delete_outline</mat-icon>  
+      </button>
+      <button mat-mini-fab
+        matTooltip="Edit array"
+        (click)="editMenuOpen = !editMenuOpen"
+        cdkOverlayOrigin
+        #trigger="cdkOverlayOrigin"
+        ><mat-icon>edit</mat-icon>
+      </button>
+      <ng-template
+        cdkConnectedOverlay
+        [cdkConnectedOverlayOrigin]="trigger"
+        [cdkConnectedOverlayOpen]="editMenuOpen"
+      >
+        <div class="overlay">
+
+          <mat-form-field appearance="fill">
+            <mat-label>Array length</mat-label>
+            <input matInput placeholder="10" [formControl]="arrLength" required>
+            <mat-error *ngIf="arrLength.invalid">{{getEditFormErrorMSg('arrLength')}}</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Minimum value</mat-label>
+            <input matInput placeholder="10" [formControl]="arrMin" required>
+            <mat-error *ngIf="arrMin.invalid">{{getEditFormErrorMSg('arrMin')}}</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Maximum value</mat-label>
+            <input matInput placeholder="10" [formControl]="arrMax" required>
+            <mat-error *ngIf="arrMax.invalid">{{getEditFormErrorMSg('arrMax')}}</mat-error>
+          </mat-form-field>
+          <button mat-button
+          >Save</button>
+          <button mat-button
+          >Send to all</button>
+          <button mat-button
+            (click)="editMenuOpen = !editMenuOpen"
+            cdkOverlayOrigin
+            #trigger="cdkOverlayOrigin"
+          >Cancel</button>
+        </div>
+      </ng-template>
+
+   
+
+      <button mat-mini-fab
+        matTooltip="Add sort window"
+        (click)="onNewArrayClick()"
+        ><mat-icon>exposure_plus_1</mat-icon>
       </button>
     </div>
   </mat-toolbar-row>

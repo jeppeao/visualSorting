@@ -13,15 +13,30 @@ mat-icon {
   gap: 15px;
 }
 
+.overlay {
+  border: 2px solid black;
+  display: flex;
+  flex-direction: column;
+  width:150px;
+  border-radius: 8px;
+  background-color: white;
+  transform: translate(-36%);
+}
+
+.overlay > button {
+  background-color: #eee;
+  margin: 3px;
+  }
+
 .sort-view-container {
   height: calc(100% - 60px);
   max-width: 100%;
   max-height: 95%;
   display: flex;
   flex-wrap: wrap;
-  gap: 5px;
+  gap: 10px;
   justify-content: center;
-  margin: 5px;
+  margin: 10px 10px 0px 10px;
  
 }
 
