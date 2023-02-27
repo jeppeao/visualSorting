@@ -1,6 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { SortService } from '../sort.service';
-import { ClassService } from '../class.service';
 import { DEFAULT_STEP_TIME, Sort, SorterStatus } from '../constants';
 import { interval, BehaviorSubject, filter, Observable, Subscription } from 'rxjs'
 import { MAT_TOOLTIP_DEFAULT_OPTIONS, MatTooltipDefaultOptions} from '@angular/material/tooltip';
@@ -29,6 +27,7 @@ export class SortViewComponent implements OnInit {
   @Input() globalIsOn$!: BehaviorSubject<boolean>;
   @Input() globalReset$!: Observable<void>;
   @Input() globalSpeed$!: Observable<number>;
+  @Input() globalArray$!: Observable<number[]>;
   @Input() destroySelf: () => void = () => {};
 
   stepTime: number = DEFAULT_STEP_TIME;
@@ -47,6 +46,8 @@ export class SortViewComponent implements OnInit {
     this.sorterStatus = this.sorterService.getNext();
     this.globalReset$.subscribe(() => this.restart());
     this.globalSpeed$.subscribe((speed) => this.changeSpeed(speed));
+    this.globalArray$.subscribe((array) => this.changeArray(array));
+    this.pause();
   }
 
   play() { 
@@ -78,6 +79,11 @@ export class SortViewComponent implements OnInit {
     this.stepTime = stepTime;
     this.ctrlSubscription.unsubscribe();
     this.ctrlSubscription = this.newCtrlSubscription();
+  }
+
+  changeArray(array: number[]) {
+    this.sorterService.setArray(array);
+    this.restart();
   }
 
   onShuffleClick() {
