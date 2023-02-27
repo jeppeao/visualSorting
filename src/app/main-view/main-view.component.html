@@ -62,36 +62,48 @@
       >
         <div class="overlay">
 
-          <mat-form-field appearance="fill">
+          <mat-form-field appearance="outline">
             <mat-label>Array length</mat-label>
-            <input matInput placeholder="10" [formControl]="arrLength" required>
-            <mat-error *ngIf="arrLength.invalid">{{getEditFormErrorMSg('arrLength')}}</mat-error>
+            <input matInput 
+              placeholder="10"
+              [formControl]="arrLength"
+              required
+              (change) ="onEdit()"
+            >
+            <mat-error *ngIf="arrLength.invalid">{{getEditFormErrorMSg(arrLength)}}</mat-error>
           </mat-form-field>
-          <mat-form-field appearance="fill">
+          <mat-form-field appearance="outline">
             <mat-label>Minimum value</mat-label>
-            <input matInput placeholder="10" [formControl]="arrMin" required>
-            <mat-error *ngIf="arrMin.invalid">{{getEditFormErrorMSg('arrMin')}}</mat-error>
+            <input matInput
+              placeholder="10"
+              [formControl]="arrMin"
+              required
+              (change) ="onEdit()"
+            >
+            <mat-error *ngIf="arrMin.invalid">{{getEditFormErrorMSg(arrMin)}}</mat-error>
           </mat-form-field>
-          <mat-form-field appearance="fill">
+          <mat-form-field appearance="outline">
             <mat-label>Maximum value</mat-label>
-            <input matInput placeholder="10" [formControl]="arrMax" required>
-            <mat-error *ngIf="arrMax.invalid">{{getEditFormErrorMSg('arrMax')}}</mat-error>
+            <input matInput
+              placeholder="10"
+              [formControl]="arrMax"
+              required
+              (change) ="onEdit()"
+            >
+            <mat-error *ngIf="arrMax.invalid">{{getEditFormErrorMSg(arrMax)}}</mat-error>
           </mat-form-field>
           <button mat-button
-          >Save</button>
-          <button mat-button
+            (click)="onSendAll()"
           >Send to all</button>
           <button mat-button
             (click)="editMenuOpen = !editMenuOpen"
             cdkOverlayOrigin
             #trigger="cdkOverlayOrigin"
-          >Cancel</button>
+          >Close</button>
         </div>
       </ng-template>
 
-   
-
-      <button mat-mini-fab
+         <button mat-mini-fab
         matTooltip="Add sort window"
         (click)="onNewArrayClick()"
         ><mat-icon>exposure_plus_1</mat-icon>

@@ -1,7 +1,8 @@
 :host {
   display: block;
   border-radius: 2%;
-  box-shadow: 1px 1px 6px black;
+  box-shadow: rgba(0, 0, 0, 0.4) 1px 1px 4px;
+
   overflow: hidden;
   --mat-color-indigo: #3F51B5;
   --mat-color-pink: #E91E63;

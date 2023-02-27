@@ -1,27 +1,26 @@
-import { Component, OnInit, ViewChild, ComponentRef, ElementRef } from '@angular/core';
-import { BehaviorSubject, fromEvent, Observable, Subject } from 'rxjs';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { SortHostDirective } from '../sort-host.directive'; 
 import { SortViewComponent } from '../sort-view/sort-view.component';
 import { MAT_TOOLTIP_DEFAULT_OPTIONS, MatTooltipDefaultOptions} from '@angular/material/tooltip';
 import { FormControl, Validators } from '@angular/forms';
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { SortService } from '../sort.service';
+import { DEFAULT_ARRAY_PARAMETERS } from '../constants';
 
 function integer(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const error: ValidationErrors = { integer: true };
-
     if (control.value && control.value != `${parseInt(control.value, 10)}`) {
       control.setErrors(error);
       return error;
     }
-
     control.setErrors(null);
     return null;
   };
 }
 
-
-export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
+export const tooltipDefaults: MatTooltipDefaultOptions = {
   showDelay: 1000,
   hideDelay: 0,
   touchendHideDelay: 500,
@@ -33,29 +32,42 @@ export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
   styleUrls: ['./main-view.component.css'],
   providers: [{
     provide: MAT_TOOLTIP_DEFAULT_OPTIONS,
-    useValue: myCustomTooltipDefaults
+    useValue: tooltipDefaults
   }],
 })
 export class MainViewComponent implements OnInit{
 
   @ViewChild(SortHostDirective, {static: true}) sortHost!: SortHostDirective;
+  arrayParameters = DEFAULT_ARRAY_PARAMETERS;
+  curArray = this.newArray();
+  editMenuOpen = false;
+  defaultSpeed = 'Standard';
   isOn$ = new BehaviorSubject(false);
   reset$: Subject<void> = new Subject<void>();
   speed$: Subject<number> = new Subject<number>();
-  editMenuOpen = false;
-  defaultSpeed = 'Standard';
+  array$: Subject<number[]> = new Subject<number[]>();
+
   arrLength = new FormControl(
-    10, [Validators.required, Validators.min(2), Validators.max(100), integer()]
+    this.arrayParameters.length,
+    [
+      Validators.required,
+      Validators.min(2),
+      Validators.max(100),
+      integer()
+    ]
   );
   arrMin = new FormControl(
-    -10, [Validators.required, Validators.min(-100), Validators.max(100), integer()]
+    this.arrayParameters.min,
+    [Validators.required, integer()]
   );
   arrMax = new FormControl (
-    10, [Validators.required, Validators.min(-100), Validators.max(100), integer()]
+    this.arrayParameters.max,
+    [Validators.required, integer()]
   );
 
-  ngOnInit() {
+  constructor(private sortService: SortService) {}
 
+  ngOnInit() {
     this.loadComponent();
     this.loadComponent();
   }
@@ -66,9 +78,10 @@ export class MainViewComponent implements OnInit{
     componentRef.instance.globalIsOn$ = this.isOn$;
     componentRef.instance.globalReset$ = this.reset$;
     componentRef.instance.globalSpeed$ = this.speed$;
+    componentRef.instance.globalArray$ = this.array$;
     componentRef.instance.destroySelf = () => componentRef.destroy();
+    return componentRef;
     // (componentRef.location.nativeElement as HTMLElement).style.width = '500px';
-
   }
 
   play() {
@@ -83,6 +96,16 @@ export class MainViewComponent implements OnInit{
     this.sortHost.viewContainerRef.clear();
   }
 
+  onEdit() {
+    this.updateArrayParameters();
+    this.curArray = this.newArray();
+  }
+
+  onSendAll() {
+    this.curArray = this.newArray();
+    this.emitGlobalArray();
+  }
+
   emitGlobalReset() {
     this.reset$.next();
   }
@@ -92,10 +115,11 @@ export class MainViewComponent implements OnInit{
   }
 
   emitGlobalArray() {
+    this.array$.next(this.curArray);
   }
 
   onNewArrayClick() {
-    this.loadComponent();
+    const comp = this.loadComponent();
   }
 
   speedToMs(speed: string) {
@@ -115,50 +139,43 @@ export class MainViewComponent implements OnInit{
     }
   }
 
-  getEditFormErrorMSg(field: string) {
-    if (field === 'arrLength') {
-      if (this.arrLength.hasError('integer')) {
-        return 'Length must be an integer'
+  getEditFormErrorMSg(ctrl: FormControl) {
+      if (ctrl.hasError('integer')) {
+        return 'Must be an integer'
       }
-      if (this.arrLength.hasError('required')) {
-        return 'You must set an array length'
+      if (ctrl.hasError('required')) {
+        return 'Required'
       }
-      if (this.arrLength.hasError('min')) {
-        return 'Array length must be greater than 0'
+      if (ctrl.hasError('min')) {
+        return 'Too small'
       }
-      if (this.arrLength.hasError('max')) {
-        return 'Please set array length below 100'
+      if (ctrl.hasError('max')) {
+        return 'Too large'
       }
+      return 'Unknown error'
     }
-    else if (field === 'arrMin') {
-      if (this.arrMin.hasError('integer')) {
-        return 'Value must be an integer'
-      }
-      if (this.arrMin.hasError('required')) {
-        return 'You must set a minimum value'
-      }
-      if (this.arrMin.hasError('min')) {
-        return 'Please set a minimum value greater than -100'
-      }
-      if (this.arrMin.hasError('max')) {
-        return 'Please set a maximum value below 100'
-      }
+
+  newArray() {
+    return this.sortService.randomArray(
+      this.arrayParameters.length,
+      this.arrayParameters.max,
+      this.arrayParameters.min,
+    );
+  }
+
+  updateArrayParameters() {
+    if (
+      this.arrLength.valid &&
+      this.arrMax.valid &&
+      this.arrMin.valid &&
+      this.arrLength.value !== null &&
+      this.arrMax.value !== null &&
+      this.arrMin.value !== null
+    ) {
+      this.arrayParameters.length = +this.arrLength.value;
+      this.arrayParameters.max = +this.arrMax.value;
+      this.arrayParameters.min = +this.arrMin.value;
     }
-    else if (field === 'arrMax') {
-      if (this.arrMax.hasError('integer')) {
-        return 'Value must be an integer'
-      }
-      if (this.arrMax.hasError('required')) {
-        return 'You must set a maximum value'
-      }
-      if (this.arrMax.hasError('min')) {
-        return 'Please set a minimum value greater than -100'
-      }
-      if (this.arrMin.hasError('max')) {
-        return 'Please set a maximum value below 100'
-      }
-    }
-    return 'Unknown error'
   }
 }
 

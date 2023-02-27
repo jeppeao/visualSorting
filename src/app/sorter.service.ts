@@ -1,14 +1,17 @@
 import { Injectable } from '@angular/core';
 import { ClassService } from './class.service';
 import { SortService } from './sort.service';
-import { SortStatus } from './constants';
-import { SorterStatus } from './constants';
+import { SortStatus, SorterStatus, DEFAULT_ARRAY_PARAMETERS } from './constants';
 import { Sort } from './constants';
 
 @Injectable()
 export class SorterService {
 
-  initialArray: number[] = this.sortService.randomArray(25, 15, -15);
+  initialArray: number[] = this.sortService.randomArray(
+    DEFAULT_ARRAY_PARAMETERS.length,
+    DEFAULT_ARRAY_PARAMETERS.max,
+    DEFAULT_ARRAY_PARAMETERS.min
+  );
   sortType: Sort = {} as Sort;
   sorter: Generator = {} as Generator;
   SorterStatus = {} as SorterStatus;  
@@ -55,5 +58,9 @@ export class SorterService {
 
   shuffle() {
     this.initialArray = this.sortService.shuffleArray(this.initialArray);
+  }
+
+  setArray(array: number[]) {
+    this.initialArray = array;
   }
 }

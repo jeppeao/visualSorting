@@ -1,4 +1,5 @@
 export const DEFAULT_STEP_TIME = 200;
+export const DEFAULT_ARRAY_PARAMETERS = {length: 20, max: 10, min: -10};
 
 export interface SortStatus {
   arr:number[],
@@ -59,3 +60,4 @@ export enum Sort {
   heap = 'heap',
   permutation = 'permutation'
 }
+
