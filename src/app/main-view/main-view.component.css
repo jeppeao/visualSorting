@@ -11,6 +11,7 @@ mat-icon {
   display: flex;
   justify-content: center;
   gap: 15px;
+  margin-left: 8px;
 }
 
 .overlay {
@@ -27,7 +28,11 @@ mat-icon {
 .overlay > button {
   background-color: #eee;
   margin: 3px;
-  }
+}
+
+.overlay > button:focus {
+  animation: none;
+}
 
 .sort-view-container {
   height: calc(100% - 60px);
@@ -41,7 +46,6 @@ mat-icon {
  
 }
 .select-menu {
-  width: 25%;
   width: 120px;
   margin-top: -12px;
   margin-right: 12px;
@@ -84,5 +88,37 @@ button:active {
   }
   100% {
     color: white;
+  }
+}
+
+@media screen and (max-width: 650px) {
+  mat-icon {
+    transform: scale(1.2);
+  }
+  
+  #control-row > button {
+    transform: scale(0.9);
+  }
+
+  #control-row {
+    gap: 5px;
+  }
+
+  .select-menu {
+    transform: scale(0.8);
+    margin-right: 2px;
+    margin-left: -8px;
+  }
+
+  .select-label {
+    font-size: 0.5em;
+  }
+
+  #title {
+    display: none;
+  }
+
+  .overlay {
+    transform: none;
   }
 }
