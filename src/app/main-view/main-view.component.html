@@ -1,115 +1,14 @@
-
-<mat-toolbar color="primary">
-  <mat-toolbar-row>
-    <span id="title">Visualize Sorting</span>
-
-    <div id="control-row">
-        <button mat-mini-fab 
-          (click)="play()"
-          matTooltip="Play all"
-          ><mat-icon >play_circle_outline</mat-icon>  
-        </button>
-        <button mat-mini-fab 
-          matTooltip="Pause"
-          (click)="pause()"
-          ><mat-icon>pause_circle_outline</mat-icon>  
-        </button>
-
-      <div class="select-menu">
-        <div class="select-label">Set Global Speed</div>
-        <mat-select #sel
-        [(value)]="defaultSpeed" 
-        (selectionChange)="emitGlobalSpeed(sel.value)"
-         >
-          <mat-select-trigger>
-            <span [ngStyle]="{
-              'color': 'white',
-              'display': 'flex',
-              'justify-content': 'center'
-            }">{{sel.value}}</span>
-          </mat-select-trigger>
-          <mat-option value="Slower">Slower</mat-option>
-          <mat-option value="Slow">Slow</mat-option>
-          <mat-option value="Standard">Standard</mat-option>
-          <mat-option value="Fast">Fast</mat-option>
-          <mat-option value="Faster">Faster</mat-option>
-          <mat-option value="Fastest">Fastest</mat-option>
-        </mat-select>
-      </div>
-
-      <button mat-mini-fab 
-        #reset
-        matTooltip="Reset all"
-        (click)="emitGlobalReset()"
-        ><mat-icon>replay</mat-icon>  
-      </button>
-      <button mat-mini-fab 
-        matTooltip="Delete all"
-        (click)="onDeleteAll()"
-        ><mat-icon>delete_outline</mat-icon>  
-      </button>
-      <button mat-mini-fab
-        matTooltip="Edit array"
-        (click)="editMenuOpen = !editMenuOpen"
-        cdkOverlayOrigin
-        #trigger="cdkOverlayOrigin"
-        ><mat-icon>edit</mat-icon>
-      </button>
-      <ng-template
-        cdkConnectedOverlay
-        [cdkConnectedOverlayOrigin]="trigger"
-        [cdkConnectedOverlayOpen]="editMenuOpen"
-      >
-        <div class="overlay">
-          <mat-form-field appearance="outline">
-            <mat-label>Array length</mat-label>
-            <input matInput 
-              placeholder="10"
-              [formControl]="arrLength"
-              required
-              (change) ="onEdit()"
-            >
-            <mat-error *ngIf="arrLength.invalid">{{getEditFormErrorMSg(arrLength)}}</mat-error>
-          </mat-form-field>
-          <mat-form-field appearance="outline">
-            <mat-label>Minimum value</mat-label>
-            <input matInput
-              placeholder="10"
-              [formControl]="arrMin"
-              required
-              (change) ="onEdit()"
-            >
-            <mat-error *ngIf="arrMin.invalid">{{getEditFormErrorMSg(arrMin)}}</mat-error>
-          </mat-form-field>
-          <mat-form-field appearance="outline">
-            <mat-label>Maximum value</mat-label>
-            <input matInput
-              placeholder="10"
-              [formControl]="arrMax"
-              required
-              (change) ="onEdit()"
-            >
-            <mat-error *ngIf="arrMax.invalid">{{getEditFormErrorMSg(arrMax)}}</mat-error>
-          </mat-form-field>
-          <button mat-button
-            (click)="onSendAll()"
-          >Send to all</button>
-          <button mat-button
-            (click)="editMenuOpen = !editMenuOpen"
-            cdkOverlayOrigin
-            #trigger="cdkOverlayOrigin"
-          >Close</button>
-        </div>
-      </ng-template>
-
-         <button mat-mini-fab
-        matTooltip="Add sort window"
-        (click)="onNewArrayClick()"
-        ><mat-icon>exposure_plus_1</mat-icon>
-      </button>
-    </div>
-  </mat-toolbar-row>
-</mat-toolbar>
+<app-main-toolbar
+  [arrayParameters]="arrayParameters"
+  [onPlay]="emitPlay" 
+  [onPause]="emitPause" 
+  [onDelete]="emitDelete"
+  [onReset]="emitReset"
+  [onSetSpeed]="emitSpeed"
+  [onNewSortWindow]="newSortWindow"
+  [onArrayEdit]="editArray"
+  [onSendToAll]="emitNewArray"
+></app-main-toolbar>
 
 <div class="sort-view-container">
   <ng-template sortHost></ng-template>

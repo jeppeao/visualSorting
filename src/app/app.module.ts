@@ -19,6 +19,7 @@ import { SorterService } from './sorter.service';
 import { OverlayModule } from '@angular/cdk/overlay'; 
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
+import { MainToolbarComponent } from './main-toolbar/main-toolbar.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { MatInputModule } from '@angular/material/input';
     ArrayViewComponent,
     MainViewComponent,
     SortViewComponent,
-    SortHostDirective
+    SortHostDirective,
+    MainToolbarComponent
   ],
   imports: [
     BrowserModule,
