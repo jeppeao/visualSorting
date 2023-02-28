@@ -1,0 +1,10 @@
+.sort-view-container {
+  height: calc(100% - 60px);
+  max-width: 100%;
+  max-height: 95%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin: 10px 10px 0px 10px;
+ }
