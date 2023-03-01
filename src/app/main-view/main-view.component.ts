@@ -84,8 +84,6 @@ export class MainViewComponent implements OnInit{
     const comp = this.loadComponent();
   }
 
-
-
   updateArrayParameters (len: number, max: number, min: number) {
     this.arrayParameters.length = len;
     this.arrayParameters.max = max;
@@ -100,7 +98,7 @@ export class MainViewComponent implements OnInit{
     );
   }
 
-    speedToMs(speed: string) {
+  speedToMs(speed: string) {
     switch(speed) {
       case 'Slower':
         return 2000;

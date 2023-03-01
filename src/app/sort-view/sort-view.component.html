@@ -1,125 +1,19 @@
 <div class="container">
-  <div class="sort-bar">
+  <app-sort-view-toolbar
+    [info]="sorterStatus.info"
+    [isOn]="(isOn$ | async) || false"
+    [setSortType]="setSortType"
+    [play]="play"
+    [pause]="pause"
+    [touched]="touched"
+    [faster]="faster"
+    [slower]="slower"
+    [restart]="restart"
+    [onShuffleClick]="onShuffleClick"
+    [destroySelf]="destroySelf"
+    [windowAddDelete$]="windowAddDelete$"
 
-    <div class="select-sort-menu">
-      <div class="select-label">Sort Type</div>
-      <mat-select 
-        [(value)]="sortSelect" 
-        (selectionChange)="onSortSelection()">
-        <mat-option value="selection">Selection</mat-option>
-        <mat-option value="insertion">Insertion</mat-option>
-        <mat-option value="bubble">Bubble</mat-option>
-        <mat-option value="heap">Heap</mat-option>
-        <mat-option value="permutation">Permutation</mat-option>
-      </mat-select>
-    </div>
-    <div class="info-panel">
-      <div *ngFor="let msg of sorterStatus.info">
-        {{msg.label}}: {{msg.content}}
-      </div>
-    </div>
-
-    <div class="long-bar" #longBar>
-      <div class="play-button-container">
-        <div *ngIf="isOn$.value === true; else elseBlock">
-          <button mat-mini-fab
-            color="primary"
-            (click)="pause()"
-            matTooltip="Pause"
-            [ngClass]="{ 'activate': true }"
-            ><mat-icon>pause_circle_outline</mat-icon>  
-          </button>
-        </div>
-        <ng-template #elseBlock>
-          <button mat-mini-fab 
-            color="primary"
-            (click)="play()"
-            matTooltip="Play"
-            [ngClass]="{'activate': touched === true}"
-            ><mat-icon >play_circle_outline</mat-icon>  
-          </button>
-        </ng-template>
-        <div class="button-stack">
-          <button mat-mini-fab 
-            (click)="faster()" 
-            matTooltip="Faster" 
-            color="primary">
-            <mat-icon>fast_forward</mat-icon>  
-          </button>
-          <button mat-mini-fab
-            (click)="slower()"
-            matTooltip="Slower"
-            color="primary">
-            <mat-icon>fast_rewind</mat-icon>  
-          </button>
-        </div>
-        <button mat-mini-fab
-          (click)="restart()"
-          matTooltip="Restart"
-          color="primary">
-          <mat-icon>replay</mat-icon>  
-        </button>
-      </div>
-
-      <button mat-mini-fab
-        id = "menu-btn"
-        [matMenuTriggerFor]="menu" 
-        matTooltip="More Options"
-        color="primary">
-        <mat-icon>more_horiz</mat-icon>  
-      </button>
-      <mat-menu #menu="matMenu">
-        <button mat-menu-item
-          (click)="onShuffleClick()"
-          matTooltip="Shuffle"
-          ><mat-icon>shuffle</mat-icon>
-          <span>Shuffle</span>  
-        </button>
-        <button mat-menu-item
-        (click)="destroySelf()"
-        matTooltip="delete"
-        ><mat-icon>delete_outline</mat-icon>
-        <span>Delete</span>  
-      </button>
-      </mat-menu>
-    </div>
-    <div #menuLongBtn>
-    <button  mat-mini-fab
-      id = "menu-long-btn"
-      [matMenuTriggerFor]="menuLong" 
-      matTooltip="More Options"
-      color="primary">
-      <mat-icon>more_horiz</mat-icon>  
-    </button>
-  </div>
-    <mat-menu #menuLong="matMenu">
-      <button mat-menu-item
-        (click)="play()"
-        ><mat-icon >play_circle_outline</mat-icon>  
-        <span>Play</span>  
-      </button>
-      <button mat-menu-item
-        (click)="pause()"
-        ><mat-icon>pause_circle_outline</mat-icon>  
-        <span>Pause</span>  
-      </button>
-      <button mat-menu-item
-        (click)="restart()"
-        ><mat-icon>replay</mat-icon>  
-        <span>Restart</span>  
-      </button>
-      <button mat-menu-item
-        (click)="onShuffleClick()"
-        ><mat-icon>shuffle</mat-icon>
-        <span>Shuffle</span>  
-      </button>
-      <button mat-menu-item
-        (click)="destroySelf()"
-        ><mat-icon>delete_outline</mat-icon>
-        <span>Delete</span>  
-      </button>
-    </mat-menu>
-  </div>
+  ></app-sort-view-toolbar>
   
   <app-array-view
     [array]="sorterStatus.arr"

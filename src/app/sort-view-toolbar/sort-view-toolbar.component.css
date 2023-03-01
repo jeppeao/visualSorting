@@ -1,0 +1,115 @@
+:host {
+  height: 60px;
+  background-color: #eef;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 2%;
+  padding-right: 2%;
+}
+
+button {  
+  transform: scale(0.9);
+}
+
+button:focus {
+  animation: activate 0.5s;
+}
+
+button:active {
+  animation: none;
+}
+
+#menu-btn:active {
+  animation: activate 0.5s;
+}
+
+#menu-btn:not(:active) {
+  animation: none;
+}
+
+mat-option {
+  font-size: 80%;
+  border-radius: 2%;
+  border: 1px solid lightgrey;
+}
+
+mat-select {
+  font-size: 110%;
+  border: 2px solid var(--primary);
+  border-radius: 8px;
+  padding: 1% 4% 0% 4%;
+  height: 30px;
+  display: flex;
+  align-items: center;
+}
+
+.select-sort-menu {
+  width: 25%;
+  max-width: 120px;
+  margin-top: -8px;
+}
+
+.select-label {
+  position: relative;
+  font-size: 0.75em;
+  color: grey;
+  left: 10%;
+  margin-bottom: -10px;
+  background-color: #eef;
+  width:fit-content;
+  padding-left: 2%;
+  padding-right: 2%;
+}
+
+.activate {
+  animation: activate 0.5s;
+}
+
+.info-panel {
+  flex: 1;
+  margin-left: 5%;
+  font-size: 0.9em;
+}
+
+.info-panel :nth-child(2) {
+  margin-top: -5px;
+}
+
+.button-stack {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  height: 100%;
+  gap: 4%;
+  margin-top: -4%;
+}
+
+.button-stack>button {
+  height: 100%;
+  width: 100%;
+  transform: scale(0.8);
+}
+
+.play-button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.play-button-container .button-stack {
+  margin-left: -2%;
+}
+
+.long-bar {
+  display: flex;
+  align-items: center;
+}
+
+@keyframes activate {
+  0% {
+    color: indigo;
+  }
+  100% {
+    color: white;
+  }
+}
