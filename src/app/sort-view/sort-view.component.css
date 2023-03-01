@@ -35,10 +35,6 @@ button:active {
   animation: none;
 }
 
-#menu-long-btn {
-  display: none;
-}
-
 mat-option {
   font-size: 80%;
   border-radius: 2%;
@@ -126,6 +122,11 @@ mat-select {
 
 .play-button-container .button-stack {
   margin-left: -2%;
+}
+
+.long-bar {
+  display: flex;
+  align-items: center;
 }
 
 @keyframes activate {

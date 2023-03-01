@@ -1,4 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { 
+  Component,
+  ElementRef,
+  Input,
+  OnInit, OnDestroy, HostListener, ViewChild, AfterViewInit } from '@angular/core';
 import { DEFAULT_STEP_TIME, Sort, SorterStatus } from '../constants';
 import { interval, BehaviorSubject, filter, Observable, Subscription } from 'rxjs'
 import { MAT_TOOLTIP_DEFAULT_OPTIONS, MatTooltipDefaultOptions} from '@angular/material/tooltip';
@@ -22,12 +26,19 @@ export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
   }
  ],
 })
-export class SortViewComponent implements OnInit {
+export class SortViewComponent implements OnInit, OnDestroy, AfterViewInit {
+
+  @HostListener('window:resize', ['$event']) onResize(event: Event) {
+    this.responsiveMenuToggle();
+  }
+  @ViewChild('menuLongBtn') longMenuBtn!: ElementRef;
+  @ViewChild('longBar') longBar!: ElementRef;
 
   @Input() globalIsOn$!: BehaviorSubject<boolean>;
   @Input() globalReset$!: Observable<void>;
   @Input() globalSpeed$!: Observable<number>;
   @Input() globalArray$!: Observable<number[]>;
+  @Input() windowAddDelete$!: Observable<void>;
   @Input() destroySelf: () => void = () => {};
 
   stepTime: number = DEFAULT_STEP_TIME;
@@ -37,17 +48,30 @@ export class SortViewComponent implements OnInit {
   touched = false;
   ctrlSubscription = this.newCtrlSubscription();
   isOn$ = new BehaviorSubject(false);
+  subs = new Subscription();
 
-  constructor (private sorterService: SorterService) { }
+  constructor (
+    private sorterService: SorterService,
+    private host: ElementRef,
+  ) { }
  
   ngOnInit(): void {
-    this.globalIsOn$.subscribe(this.isOn$);
+    this.subs.add(this.globalIsOn$.subscribe(this.isOn$));
     this.sorterService.defineSorter(this.sort);
     this.sorterStatus = this.sorterService.getNext();
-    this.globalReset$.subscribe(() => this.restart());
-    this.globalSpeed$.subscribe((speed) => this.changeSpeed(speed));
-    this.globalArray$.subscribe((array) => this.changeArray(array));
+    this.subs.add(this.globalReset$.subscribe(() => this.restart()));
+    this.subs.add(this.globalSpeed$.subscribe((speed) => this.changeSpeed(speed)));
+    this.subs.add(this.globalArray$.subscribe((array) => this.changeArray(array)));
+    this.subs.add(this.windowAddDelete$.subscribe(() => this.responsiveMenuToggle()));
     this.pause();
+  }
+
+  ngAfterViewInit(): void {
+    this.responsiveMenuToggle()
+  }
+  
+  ngOnDestroy(): void {
+    this.subs.unsubscribe();
   }
 
   play() { 
@@ -55,10 +79,21 @@ export class SortViewComponent implements OnInit {
     this.touch();
   }
 
-  pause() { this.isOn$.next(false); }
-  slower() { this.changeSpeed(this.stepTime*2) }
-  faster() { this.changeSpeed(this.stepTime/2) }
-  touch() { this.touched=true }
+  pause() { 
+    this.isOn$.next(false); 
+  }
+  
+  slower() { 
+    this.changeSpeed(this.stepTime*2) 
+  }
+
+  faster() { 
+    this.changeSpeed(this.stepTime/2) 
+  }
+  
+  touch() {
+    this.touched=true
+  }
 
   newCtrlSubscription() {
     return interval(this.stepTime).pipe(
@@ -114,6 +149,21 @@ export class SortViewComponent implements OnInit {
     }
     this.sorterService.setSortType(type);
     this.restart();
+  }
+
+  responsiveMenuToggle() {
+    const width = this.host.nativeElement.clientWidth;
+    if (this.longBar && this.longMenuBtn) {
+      if (width < 400) {
+      this.longBar.nativeElement.style.display = 'none';
+      this.longMenuBtn.nativeElement.style.display = 'block';
+      }
+      else {
+        this.longBar.nativeElement.style.display = 'flex';
+        this.longMenuBtn.nativeElement.style.display = 'none';
+      }
+    }
+
   }
 
 }

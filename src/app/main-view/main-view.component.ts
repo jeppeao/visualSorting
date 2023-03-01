@@ -18,6 +18,7 @@ export class MainViewComponent implements OnInit{
   curArray = this.newArray();
   isOn$ = new BehaviorSubject(false);
   reset$: Subject<void> = new Subject<void>();
+  windowAddDelete$: Subject<void> = new Subject<void>();
   speed$: Subject<number> = new Subject<number>();
   array$: Subject<number[]> = new Subject<number[]>();
 
@@ -35,7 +36,12 @@ export class MainViewComponent implements OnInit{
     componentRef.instance.globalReset$ = this.reset$;
     componentRef.instance.globalSpeed$ = this.speed$;
     componentRef.instance.globalArray$ = this.array$;
-    componentRef.instance.destroySelf = () => componentRef.destroy();
+    componentRef.instance.windowAddDelete$ = this.windowAddDelete$;
+    componentRef.instance.destroySelf = () => {
+      componentRef.destroy();
+      this.windowAddDelete$.next();
+    }
+    this.windowAddDelete$.next();
     return componentRef;
     // (componentRef.location.nativeElement as HTMLElement).style.width = '500px';
   }
