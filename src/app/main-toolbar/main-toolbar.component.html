@@ -14,7 +14,7 @@
         </button>
 
       <div class="select-menu">
-        <div class="select-label">Set Global Speed</div>
+        <div class="select-label">Synchronize Speed</div>
         <mat-select #sel
         [(value)]="selectedSpeed" 
         (selectionChange)="onSetSpeed(sel.value)"
@@ -87,7 +87,7 @@
           </mat-form-field>
           <button mat-button
             (click)="onSendToAll()"
-          >Send to all</button>
+          >Synchronize</button>
           <button mat-button
             (click)="editMenuOpen = !editMenuOpen"
             cdkOverlayOrigin

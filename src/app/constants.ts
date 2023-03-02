@@ -44,13 +44,22 @@ export interface SorterStatus {
   done: boolean;
 }
 
+export interface QuicksortStatus extends SortStatus {
+  start: number,
+  end: number,
+  pId: number,
+  swap: boolean,
+  done: boolean,
+}
+
 export enum ArrayClass {
   value = 'value',
   current = 'current',
   sorted = 'sorted',
   unsorted = 'unsorted',
   marked = 'marked',
-  swapped = 'swapped'
+  swapped = 'swapped',
+  dim = 'dim'
 }
 
 export enum Sort {
@@ -58,6 +67,7 @@ export enum Sort {
   insertion = 'insertion',
   bubble = 'bubble',
   heap = 'heap',
-  permutation = 'permutation'
+  permutation = 'permutation',
+  quick = 'quick'
 }
 

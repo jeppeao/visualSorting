@@ -57,6 +57,9 @@
   bottom: 100%;
 }
 
+.dim {
+  opacity: 0.3;
+}
 
 .sorted {
   background-color: green;

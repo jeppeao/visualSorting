@@ -6,9 +6,8 @@ import { Sort } from './constants'
 })
 export class SortService {
   
-  constructor() {}
+  constructor() { }
   
-
   randomArray(length: number, hi: number, lo: number) {
     return [...Array(length)]
      .map(() => Math.floor(Math.random()* (hi + 1 - lo)) + lo);
@@ -30,6 +29,7 @@ export class SortService {
     let j = 0;
     let swapped;
     let low = 0;
+    let lowVal = 0;
     yield {arr: [...arr], i, j, low, swap: false, info}
     for (i=0; i<arr.length-1; i++) {
       low = i;
@@ -63,7 +63,7 @@ export class SortService {
         info.swaps += 1;
         yield {arr: [...arr], i, j, swap: true, info};
       }
-      info.comparisons += 1;
+      info.comparisons = j === -1 ? info.comparisons : info.comparisons+1;
     }
     yield {arr: [...arr], i:arr.length, j:arr.length, swap: false, info};
   }
@@ -236,6 +236,78 @@ export class SortService {
     yield {...stat};
   }
 
+  *quicksortGen(array: number[]) {
+    let arr = [...array];
+    let states:{}[] = [];
+
+    const info = {swaps: 0, comparisons: 0};
+
+    let stack = [0, arr.length-1];
+    while (stack.length > 0) {
+      const end = stack.pop();
+      const start = stack.pop();
+
+      if (start !== undefined && end !== undefined) {
+        const pivot = partition(start, end);
+        for (let state of states) {
+          yield {...state, done: false};
+        }
+        states = [];
+        if (pivot > start) {
+          stack.push(start);
+          stack.push(pivot);
+        }
+
+        if (pivot + 1 < end) {
+          stack.push(pivot + 1);
+          stack.push(end);
+        }
+      }
+    }
+    yield {arr, i:-1, j:-1, start:-1, end:-2, swap: false, info, done: true}
+    
+    function partition(start:number, end:number) {
+      // choose pivot as middle index value
+      let pId = start + Math.floor((end-start)/2);
+      const pivot = arr[pId];
+      
+      let i = start;
+      let j = end;
+      while (true) {
+        states.push({
+          arr: [...arr], i, j, info: {...info}, swap: false, start, end, pId
+        })
+
+        while (arr[i] < pivot) {
+          i++;
+          info.comparisons++;
+          states.push({
+            arr: [...arr], i, j, info: {...info}, swap: false, start, end, pId
+          })
+        }
+        while (arr[j] > pivot) {
+          j--;
+          info.comparisons++;
+          states.push({
+            arr: [...arr], i, j, info: {...info}, swap: false, start, end, pId
+          })
+        }
+        if (i >= j) break;
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+        i++;
+        j--;
+
+        if (pId === i) {pId = j}
+        else if (pId === j) {pId = i}
+        info.swaps++;
+        states.push({
+          arr: [...arr], i, j, info: {...info}, swap: true, start, end, pId
+        });
+      }
+      return Math.min(i,j);
+    }
+  }
+
   getSorter(type: Sort, array: number[]) {
     switch(type) {
       case Sort.selection:
@@ -248,6 +320,8 @@ export class SortService {
         return this.heapSortGen(array);
       case Sort.permutation:
         return this.permutationSortGen(array);
+      case Sort.quick:
+        return this.quicksortGen(array);
     }
   }
 }

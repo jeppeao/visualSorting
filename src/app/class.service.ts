@@ -6,7 +6,8 @@ import {
   ArrayClass,
   Sort,
   HeapSortStatus,
-  PermutationSortStatus
+  PermutationSortStatus,
+  QuicksortStatus,
  } from './constants';
 
 @Injectable({
@@ -28,6 +29,8 @@ export class ClassService {
         return this.getHeapSortClassList(status as HeapSortStatus);
       case (Sort.permutation):
         return this.getPermutationSortClassList(status as PermutationSortStatus);
+      case (Sort.quick):
+        return this.getQuicksortClassList(status as QuicksortStatus);
     }
   }
 
@@ -155,6 +158,31 @@ export class ClassService {
       if (status.done === true) {
         clist.push(ArrayClass.sorted);
       }
+      return clist.join(' ');
+    });
+  }
+
+  getQuicksortClassList(status: QuicksortStatus): string[] {
+    return status.arr.map((_, idx) => {
+      const clist = [ArrayClass.value];
+    
+      if (status.done === true) {
+        clist.push(ArrayClass.sorted);
+        return clist.join(' ');
+      }
+      if (status.i === idx || status.j === idx) {
+        clist.push(ArrayClass.current)
+      }
+      if (status.pId === idx) {
+        clist.push(ArrayClass.marked)
+      }
+      else {
+        clist.push(ArrayClass.unsorted)
+      }
+      if (idx < status.start || idx > status.end) {
+        clist.push(ArrayClass.dim)
+      }
+
       return clist.join(' ');
     });
   }
