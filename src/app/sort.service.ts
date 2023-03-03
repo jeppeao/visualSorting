@@ -22,6 +22,12 @@ export class SortService {
     return arr;
   }
 
+  isSorted(array: number[]) {
+    return array.every(
+      (val, idx) => idx === 0 || val >= array[idx-1]
+    );
+  }
+
   *selectionSortGen(array: number[]) {
     const arr = [...array]
     const info = {swaps: 0, comparisons: 0};
@@ -210,7 +216,7 @@ export class SortService {
       info.comparisons += 1;
       // check if done 
       if (i <= 0) {
-        return {arr: [...arr], i, j, info: {...info}, done: true};
+        return { arr: [...arr], i, j, info: {...info}, done: true };
       }
       //find largest suffix element smaller than pivot
       while (arr[j] >= arr[i-1]) {
@@ -218,22 +224,20 @@ export class SortService {
         info.comparisons += 1;
       }
       info.comparisons += 1;
-      // swap
       [arr[j], arr[i-1]] = [arr[i-1], arr[j]];
       info.swaps += 1;
-      // reverse suffix
       arr = [...arr.slice(0, i), ...arr.slice(i).reverse()];
       info.swaps += Math.floor(arr.slice(i).length / 2);
-      return {arr: [...arr], i, j, info: {...info}, done: false};
+        return { arr: [...arr], i, j, info: {...info}, done: false };
     }
 
-    yield {arr: [...arr], i:-1, j:-1, info: {...info}, done: false};
+    yield { arr: [...arr], i: Infinity, j:-1, info: {...info}, done: false };
     let stat = nextPerm();
     while(stat.done === false) {
-      yield {...stat};
-      stat = nextPerm()
+        yield stat;
+        stat = nextPerm()
     }
-    yield {...stat};
+    yield stat;
   }
 
   *quicksortGen(array: number[]) {
@@ -412,6 +416,19 @@ export class SortService {
     }
   }
 
+  *miracleSortGen(array: number[]) {
+    const arr = [...array];
+    const info = {'times checked': 0, sorted: 'false'};
+
+    while (this.isSorted(arr) === false) {
+      info['times checked'] += 1;
+      yield {arr: [...array], info}
+    }
+    info['times checked'] += 1;
+    info.sorted = 'true';
+    yield { arr: [...array], info }
+  }
+
   getSorter(type: Sort, array: number[]) {
     switch(type) {
       case Sort.selection:
@@ -428,6 +445,8 @@ export class SortService {
         return this.quicksortGen(array);
       case Sort.merge:
         return this.mergeSortGen(array);
+      case Sort.miracle:
+        return this.miracleSortGen(array);
     }
   }
 }

@@ -32,18 +32,6 @@ export interface PermutationSortStatus extends SortStatus {
   done: boolean,
 }
 
-export interface InfoItem {
-  label: string;
-  content: string;
-}
-
-export interface SorterStatus {
-  arr: number[];
-  classList: string[];
-  info: InfoItem[];
-  done: boolean;
-}
-
 export interface QuickSortStatus extends SortStatus {
   start: number,
   end: number,
@@ -65,6 +53,23 @@ export interface MergeSortStatus extends SortStatus {
   mi: number
 }
 
+export interface MiracleSortStatus {
+  arr: number[],
+  info: { sorted: string };
+}
+
+export interface InfoItem {
+  label: string;
+  content: string;
+}
+
+export interface SorterStatus {
+  arr: number[];
+  classList: string[];
+  info: InfoItem[];
+  done: boolean;
+}
+
 export enum ArrayClass {
   value = 'value',
   current = 'current',
@@ -83,6 +88,7 @@ export enum Sort {
   heap = 'heap',
   permutation = 'permutation',
   quick = 'quick',
-  merge = 'merge'
+  merge = 'merge',
+  miracle = 'miracle'
 }
 

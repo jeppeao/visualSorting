@@ -67,6 +67,8 @@ export class SortViewToolbarComponent implements AfterViewInit, OnDestroy {
         return Sort.quick;
       case 'merge':
         return Sort.merge;
+      case 'miracle':
+        return Sort.miracle;
       default:
         return Sort.insertion;
     }

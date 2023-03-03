@@ -9,6 +9,7 @@ import {
   PermutationSortStatus,
   QuickSortStatus,
   MergeSortStatus,
+  MiracleSortStatus,
  } from './constants';
 
 @Injectable({
@@ -34,6 +35,8 @@ export class ClassService {
         return this.getQuickSortClassList(status as QuickSortStatus);
       case (Sort.merge):
         return this.getMergeSortClassList(status as MergeSortStatus);
+      case (Sort.miracle):
+        return this.getMiracleSortClassList(status as MiracleSortStatus);
     }
   }
 
@@ -151,19 +154,19 @@ export class ClassService {
   getPermutationSortClassList(status: PermutationSortStatus): string[] {
     return status.arr.map((_, idx) => {
       const clist = [ArrayClass.value];
-      
-      if (status.done === false) {
-        clist.push(ArrayClass.unsorted);
-      }
-      if (status.done === false && [status.i-1].includes(idx)) {
-        clist.push(ArrayClass.marked);
-      }
-      if (status.done === false && idx >= status.i) {
-        clist.push(ArrayClass.mark2);
-      }
       if (status.done === true) {
         clist.push(ArrayClass.sorted);
+        return clist.join(' ');
       }
+      else {
+        clist.push(ArrayClass.unsorted);
+      }
+
+      console.log(idx, status.i, idx >= status.i -1)
+      if (idx >= status.i - 1) {
+        clist.push(ArrayClass.mark2);
+      }
+
       return clist.join(' ');
     });
   }
@@ -171,7 +174,6 @@ export class ClassService {
   getQuickSortClassList(status: QuickSortStatus): string[] {
     return status.arr.map((_, idx) => {
       const clist = [ArrayClass.value];
-    
       if (status.done === true) {
         clist.push(ArrayClass.sorted);
         return clist.join(' ');
@@ -188,7 +190,6 @@ export class ClassService {
       if (idx < status.start || idx > status.end) {
         clist.push(ArrayClass.dim)
       }
-
       return clist.join(' ');
     });
   }
@@ -233,8 +234,19 @@ export class ClassService {
       else {
         clist.push(ArrayClass.unsorted)
       }
-    
+      return clist.join(' ');
+    });
+  }
 
+  getMiracleSortClassList(status: MiracleSortStatus): string[] {
+    return status.arr.map((_, idx) => {
+      const clist = [ArrayClass.value];
+      if (status.info.sorted === 'true') {
+        clist.push(ArrayClass.sorted);
+      }
+      else {
+        clist.push(ArrayClass.unsorted);
+      }
       return clist.join(' ');
     });
   }
