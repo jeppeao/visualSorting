@@ -38,8 +38,9 @@ export class MainViewComponent implements OnInit{
     componentRef.instance.globalArray$ = this.array$;
     componentRef.instance.windowAddDelete$ = this.windowAddDelete$;
     componentRef.instance.destroySelf = () => {
+      setTimeout(() => this.windowAddDelete$.next(), 10);
       componentRef.destroy();
-      this.windowAddDelete$.next();
+     
     }
     this.windowAddDelete$.next();
     return componentRef;

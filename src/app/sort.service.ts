@@ -239,7 +239,6 @@ export class SortService {
   *quicksortGen(array: number[]) {
     let arr = [...array];
     let states:{}[] = [];
-
     const info = {swaps: 0, comparisons: 0};
 
     let stack = [0, arr.length-1];
@@ -308,6 +307,111 @@ export class SortService {
     }
   }
 
+  *mergeSortGen(array: number[]) {
+    let arr = [...array];
+    let merged = new Array(Math.ceil(arr.length +1)).fill(0); // one empty item for array-view
+
+    let states:{}[] = [];
+    const info = {insertions: 0, comparisons: 0};
+
+    yield {
+      arr: [...arr], info: {...info}, merged: false, merging: false,
+      i:-Infinity, j:-Infinity, done: false, s1:-1, e1:-1, s2:-1, e2:-1, mi: -2
+    }
+    for (let size=1; size<arr.length; size*=2) {
+      for (let i=0; i<arr.length-1; i+=2*size) {
+         const s1 = i;
+         const e1 = i + size - 1; 
+         const s2 = e1 + 1;
+         let e2 = s2 + size - 1;
+         if (e1 >= arr.length - 1) {
+          break;
+         }
+         if (e2 > arr.length - 1) {
+          e2 = arr.length -1;
+         }
+         merge(s1, e1, s2, e2);
+         for (let state of states) {
+          yield state;
+         }
+         states = [];
+      }
+    }
+    yield {
+      arr: [...arr], info: {...info}, merging: false,
+      i:-1, j:-1, done: true, s1:-1, e1:-1, s2:-1, e2:-1, mi: -2
+    }
+    
+    function merge(s1: number, e1: number, s2:number, e2:number ) {
+      let i = s1;
+      let j = s2;
+      let mi = 0;
+
+      while (i < j && i <= e1 && j <= e2) {
+        states.push({
+          arr: [...merged, ...arr], info: {...info}, merged: false,
+          i, j, done: false, s1, e1, s2, e2, mi, merging: true
+        });
+        if (arr[i] <= arr[j]) {
+          merged[mi] = arr[i];
+          mi++;
+          info.comparisons += 1;
+          info.insertions += 1;
+          states.push({
+            arr: [...merged, ...arr], info: {...info}, merged: false,
+            i, j, done: false, s1, e1, s2, e2, mi, merging: true
+          });
+          i++;
+        }
+        else {
+          merged[mi] = arr[j];
+          mi++;
+          info.comparisons += 1;
+          info.insertions += 1;
+          states.push({
+            arr: [...merged, ...arr], info: {...info}, merged: false,
+            i, j, done: false, s1, e1, s2, e2, mi, merging: true
+          });
+          j++;
+        }  
+      }
+      states.push({
+        arr: [...merged, ...arr], info: {...info}, merged: false,
+        i, j, done: false, s1, e1, s2, e2, mi, merging: true
+      });
+      while (i <= e1) {
+        merged[mi] = arr[i];
+        i++;
+        mi++;
+        info.insertions += 1;
+        states.push({
+          arr: [...merged, ...arr], info: {...info}, merged: false,
+          i, j, done: false, s1, e1, s2, e2, mi, merging: true
+        });
+      }
+      while (j <= e2) {
+        merged[mi] = arr[j];
+        j++;
+        mi++;
+        info.insertions += 1;
+        states.push({
+          arr: [...merged, ...arr], info: {...info}, merged: false,
+          i, j, done: false, s1, e1, s2, e2, mi, merging: true
+        });
+      }
+      for (let k=0; k<=e2-s1; k++) {
+        arr[s1+k] = merged[k];
+        info.insertions += 1;
+      }
+      merged = new Array(Math.ceil(arr.length +1)).fill(0);
+      
+      states.push({
+        arr: [...merged, ...arr], info: {...info}, merged: true,
+        i, j, done: false, s1, e1, s2, e2, mi: -1, merging: true
+      });
+    }
+  }
+
   getSorter(type: Sort, array: number[]) {
     switch(type) {
       case Sort.selection:
@@ -322,6 +426,8 @@ export class SortService {
         return this.permutationSortGen(array);
       case Sort.quick:
         return this.quicksortGen(array);
+      case Sort.merge:
+        return this.mergeSortGen(array);
     }
   }
 }

@@ -7,7 +7,8 @@ import {
   Sort,
   HeapSortStatus,
   PermutationSortStatus,
-  QuicksortStatus,
+  QuickSortStatus,
+  MergeSortStatus,
  } from './constants';
 
 @Injectable({
@@ -30,7 +31,9 @@ export class ClassService {
       case (Sort.permutation):
         return this.getPermutationSortClassList(status as PermutationSortStatus);
       case (Sort.quick):
-        return this.getQuicksortClassList(status as QuicksortStatus);
+        return this.getQuickSortClassList(status as QuickSortStatus);
+      case (Sort.merge):
+        return this.getMergeSortClassList(status as MergeSortStatus);
     }
   }
 
@@ -152,8 +155,11 @@ export class ClassService {
       if (status.done === false) {
         clist.push(ArrayClass.unsorted);
       }
-      if (status.done === false && [status.i-1, status.j].includes(idx)) {
+      if (status.done === false && [status.i-1].includes(idx)) {
         clist.push(ArrayClass.marked);
+      }
+      if (status.done === false && idx >= status.i) {
+        clist.push(ArrayClass.mark2);
       }
       if (status.done === true) {
         clist.push(ArrayClass.sorted);
@@ -162,7 +168,7 @@ export class ClassService {
     });
   }
 
-  getQuicksortClassList(status: QuicksortStatus): string[] {
+  getQuickSortClassList(status: QuickSortStatus): string[] {
     return status.arr.map((_, idx) => {
       const clist = [ArrayClass.value];
     
@@ -182,6 +188,52 @@ export class ClassService {
       if (idx < status.start || idx > status.end) {
         clist.push(ArrayClass.dim)
       }
+
+      return clist.join(' ');
+    });
+  }
+
+  getMergeSortClassList(status: MergeSortStatus): string[] {
+    const mLen = Math.ceil(status.arr.length/2);
+    return status.arr.map((_, idx) => {
+      const clist = [ArrayClass.value];
+    
+      if (status.done === true) {
+        clist.push(ArrayClass.sorted);
+        return clist.join(' ');
+      }
+      
+      // hide non-used parts of merge array
+      if (status.merging && idx >= status.mi && idx < mLen) {
+        return clist.join(' ');
+      }
+      if (status.merging && (idx < status.s1+mLen || idx > status.e2+mLen)) {
+        if (idx >= mLen) {
+          clist.push(ArrayClass.dim);
+        }
+      }
+      else if (status.merged === true) {
+        clist.push(ArrayClass.swapped);
+        clist.push(ArrayClass.sorted);
+        return clist.join(' ');
+      }
+      if ((idx === status.i + mLen && idx <= status.e1 + mLen) ||
+        (idx === status.j + mLen && idx <= status.e2 + mLen)) {
+        clist.push(ArrayClass.current);
+      }
+
+      if (status.merging && !status.merged &&
+        idx >= status.s1 + mLen && idx <= status.e1 + mLen) {
+        clist.push(ArrayClass.marked)
+      }
+      else if (status.merging && !status.merged && 
+        idx >= status.s2 + mLen && idx <= status.e2 + mLen) {
+        clist.push(ArrayClass.mark2)
+      }
+      else {
+        clist.push(ArrayClass.unsorted)
+      }
+    
 
       return clist.join(' ');
     });

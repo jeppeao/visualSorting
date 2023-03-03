@@ -20,7 +20,7 @@
   width: 100%;
   display: flex;
   align-items: flex-end;
-  gap: 2px;
+  gap: 1px;
 }
 
 .array-container > div {
@@ -71,6 +71,10 @@
 
 .marked {
   background-color: orange;
+}
+
+.mark2 {
+  background-color: burlywood;
 }
 
 .zero-value {
