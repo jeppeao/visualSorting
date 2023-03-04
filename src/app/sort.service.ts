@@ -7,7 +7,7 @@ import { Sort } from './constants'
 export class SortService {
   
   constructor() { }
-  
+    
   randomArray(length: number, hi: number, lo: number) {
     return [...Array(length)]
      .map(() => Math.floor(Math.random()* (hi + 1 - lo)) + lo);
@@ -416,6 +416,89 @@ export class SortService {
     }
   }
 
+  *cycleSortGen(array: number[]) {
+    const arr = [...array];
+    const swapArr = [0, 0];
+    const sorted = [];
+    const info = {insertions: 0, comparisons: 0};
+
+    for (let i = 0; i < arr.length-1; i++) {
+      let pos = i;
+      let cur = arr[i]
+      swapArr[0] = cur;
+      for (let j=i+1; j< arr.length; j++) {
+        pos = arr[j] < cur ? pos + 1: pos;
+        info.comparisons += 1;
+        yield { 
+          arr: [...swapArr, ...arr], i, j, pos,
+          cur, sorted:[...sorted], info, done: false
+        }
+      }
+
+      // element is already in correct position
+      if (pos === i) {
+        sorted.push(pos)
+        yield { 
+          arr: [...swapArr, ...arr], i, j:-1, pos,
+          cur, sorted:[...sorted], info, done: false
+        }
+        continue;
+      }
+      // put element after other equal elements
+      while (arr[pos] === cur) {
+        info.comparisons += 1;
+        pos++;
+        yield { 
+          arr: [...swapArr, ...arr], i, j:-1, pos,
+          cur, sorted:[...sorted], info, done: false
+        }
+      }
+      info.comparisons += 1;
+      [arr[pos], cur] = [cur, arr[pos]];
+      info.insertions += 1;
+      sorted.push(pos);
+      swapArr[0] = cur;
+      yield { 
+        arr: [...swapArr, ...arr], i, j:-1, pos,
+        cur, sorted:[...sorted], info, done: false
+      }
+      // find end of cycle
+      while (pos !== i) {
+        pos = i;
+        for (let j=i+1; j< arr.length; j++) {
+          pos = arr[j] < cur ? pos + 1: pos;
+          info.comparisons += 1;
+          yield { 
+            arr: [...swapArr, ...arr], i, j, pos,
+            cur, sorted:[...sorted], info, done: false
+          }
+        }
+        // put element after other equal elements
+        while (arr[pos] === cur) {
+          info.comparisons += 1;
+          pos++;
+          yield { 
+            arr: [...swapArr, ...arr], i, j:-1, pos,
+            cur, sorted:[...sorted], info, done: false
+          }
+        }
+        info.comparisons += 1;
+        [arr[pos], cur] = [cur, arr[pos]];
+        info.insertions += 1;
+        sorted.push(pos);
+        swapArr[0] = cur;
+        yield { 
+          arr: [...swapArr, ...arr], i,j:-1, pos,
+          cur, sorted:[...sorted], info, done: false
+        }
+      }
+    }
+    yield { 
+      arr: [...swapArr, ...arr], i:-1,j:-1, pos:-1,
+      cur:-1, sorted:[...sorted], info, done: true
+    }
+  }
+
   *miracleSortGen(array: number[]) {
     const arr = [...array];
     const info = {'times checked': 0, sorted: 'false'};
@@ -445,6 +528,8 @@ export class SortService {
         return this.quicksortGen(array);
       case Sort.merge:
         return this.mergeSortGen(array);
+      case Sort.cycle:
+        return this.cycleSortGen(array);
       case Sort.miracle:
         return this.miracleSortGen(array);
     }

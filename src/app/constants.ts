@@ -53,6 +53,13 @@ export interface MergeSortStatus extends SortStatus {
   mi: number
 }
 
+export interface CycleSortStatus extends SortStatus {
+  cur: number,
+  pos: number,
+  sorted: number[],
+  done: boolean,
+}
+
 export interface MiracleSortStatus {
   arr: number[],
   info: { sorted: string };
@@ -89,6 +96,7 @@ export enum Sort {
   permutation = 'permutation',
   quick = 'quick',
   merge = 'merge',
-  miracle = 'miracle'
+  miracle = 'miracle',
+  cycle = 'cycle',
 }
 

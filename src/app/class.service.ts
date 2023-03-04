@@ -10,6 +10,7 @@ import {
   QuickSortStatus,
   MergeSortStatus,
   MiracleSortStatus,
+  CycleSortStatus,
  } from './constants';
 
 @Injectable({
@@ -37,7 +38,9 @@ export class ClassService {
         return this.getMergeSortClassList(status as MergeSortStatus);
       case (Sort.miracle):
         return this.getMiracleSortClassList(status as MiracleSortStatus);
-    }
+      case (Sort.cycle):
+        return this.getCycleSortClassList(status as CycleSortStatus);
+      }
   }
 
   getSelectionSortClassList(sortStatus: SelectionSortStatus): string[] {
@@ -247,6 +250,40 @@ export class ClassService {
       else {
         clist.push(ArrayClass.unsorted);
       }
+      return clist.join(' ');
+    });
+  }
+
+  getCycleSortClassList(status: CycleSortStatus): string[] {
+    const pre = 2;
+    return status.arr.map((_, idx) => {
+      const clist = [ArrayClass.value];
+
+      if (idx === 1) {
+        return ArrayClass.value
+      }
+      if (status.done === true && idx === 0) {
+        return ArrayClass.value;
+      }
+      if (status.done === true) {
+        return ArrayClass.sorted;
+      }
+      if (status.pos === idx - pre) {
+        clist.push(ArrayClass.marked)
+      }
+      else if (status.sorted.includes(idx - pre)) {
+        clist.push(ArrayClass.sorted)
+      }
+      else {
+        clist.push(ArrayClass.unsorted);
+      }
+      if (status.j === idx - pre) {
+        clist.push(ArrayClass.current)
+      }
+      else if (idx === 0) {
+        clist.push(ArrayClass.dim)
+      }
+
       return clist.join(' ');
     });
   }
