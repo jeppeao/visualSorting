@@ -499,6 +499,42 @@ export class SortService {
     }
   }
 
+  *countingSortGen(array: number[]) {
+    const arr = [...array];
+    const info = { 'count list length': 0, 'items scanned': 0 };
+    let min: number = arr[0], max: number = arr[0];
+    
+    yield { arr: [...arr], i:-1, info, j: -1, state: 'minmax' }
+    
+    for (let i=0; i< arr.length; i++) {
+      min = arr[i] < min ? arr[i] : min;
+      max = arr[i] > max ? arr[i] : max;
+      info['items scanned'] += 1;
+      info['count list length'] = max - min + 1;
+      yield { arr: [...arr], i, info, j: -1, state: 'minmax' }
+    }
+    const counts = new Array(max - min + 1).fill(0);
+    info['count list length'] = max - min + 1;
+    for (let i=0; i < array.length; i++) {
+      counts[array[i] - min] += 1;
+      info['items scanned'] += 1;
+      yield {arr: [...counts, max, min ,...arr], i, info, j:-1, state: 'count'}
+    }
+    let i = 0;
+    for (let j=min; j<=max; j++) {
+      for (let c=0; c<counts[j - min]; c++) {
+        arr[i] = j;
+        info['items scanned'] += 1;
+        yield {
+          arr: [...counts, max, min, ...arr], 
+          i, info, j: j-min, state: 'distribute'
+        }
+        i++;
+      }
+    }
+    yield { arr: [...arr], i, info, j: -1, state: 'done' }
+  }
+
   *miracleSortGen(array: number[]) {
     const arr = [...array];
     const info = {'times checked': 0, sorted: 'false'};
@@ -530,6 +566,8 @@ export class SortService {
         return this.mergeSortGen(array);
       case Sort.cycle:
         return this.cycleSortGen(array);
+      case Sort.counting:
+          return this.countingSortGen(array);
       case Sort.miracle:
         return this.miracleSortGen(array);
     }

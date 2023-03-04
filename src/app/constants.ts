@@ -5,7 +5,7 @@ export interface SortStatus {
   arr:number[],
   i:number,
   j:number,
-  info: {};
+  info: { [key: string]: string; };
 }
 
 export interface SelectionSortStatus extends SortStatus {
@@ -60,6 +60,10 @@ export interface CycleSortStatus extends SortStatus {
   done: boolean,
 }
 
+export interface CountingSortStatus extends SortStatus {
+  state: string,
+}
+
 export interface MiracleSortStatus {
   arr: number[],
   info: { sorted: string };
@@ -98,5 +102,6 @@ export enum Sort {
   merge = 'merge',
   miracle = 'miracle',
   cycle = 'cycle',
+  counting = 'counting'
 }
 

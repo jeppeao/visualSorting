@@ -11,6 +11,7 @@ import {
   MergeSortStatus,
   MiracleSortStatus,
   CycleSortStatus,
+  CountingSortStatus,
  } from './constants';
 
 @Injectable({
@@ -40,6 +41,9 @@ export class ClassService {
         return this.getMiracleSortClassList(status as MiracleSortStatus);
       case (Sort.cycle):
         return this.getCycleSortClassList(status as CycleSortStatus);
+      case (Sort.counting):
+        return this.getCountingSortClassList(status as CountingSortStatus);
+          
       }
   }
 
@@ -165,7 +169,6 @@ export class ClassService {
         clist.push(ArrayClass.unsorted);
       }
 
-      console.log(idx, status.i, idx >= status.i -1)
       if (idx >= status.i - 1) {
         clist.push(ArrayClass.mark2);
       }
@@ -282,6 +285,43 @@ export class ClassService {
       }
       else if (idx === 0) {
         clist.push(ArrayClass.dim)
+      }
+
+      return clist.join(' ');
+    });
+  }
+
+  getCountingSortClassList(status: CountingSortStatus): string[] {
+    const countLength = parseInt(status.info['count list length']) + 1;
+    return status.arr.map((_, idx) => {
+      const clist = [ArrayClass.value];
+      
+      if (status.state === 'done') {
+        clist.push(ArrayClass.sorted);
+      }
+      else if (status.state === 
+        'distribute' &&
+         idx > countLength &&
+         idx < status.i + countLength + 2
+       ) {
+        clist.push(ArrayClass.sorted);
+      }
+      else {
+        clist.push(ArrayClass.unsorted);
+      }
+      if (status.state === 'minmax' && idx === status.i) {
+        clist.push(ArrayClass.current);
+      }
+      if (status.state === 'count' || status.state === 'distribute') {
+        if (idx === countLength || idx === countLength - 1) {
+          return [ArrayClass.value].join(' ');
+        }
+        if (idx === countLength + 2 + status.i) {
+        clist.push(ArrayClass.current);  
+        }
+      }
+      if (status.state === 'distribute' && idx === status.j) {
+        clist.push(ArrayClass.current);  
       }
 
       return clist.join(' ');
