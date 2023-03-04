@@ -53,6 +53,7 @@ export class MainToolbarComponent implements OnInit, OnChanges {
   @Input() onReset!: () => void;
   @Input() onSetSpeed!: (speed: string) => void;
   @Input() onDelete!: () => void;
+  @Input() onNew!: () => void;
   @Input() onNewSortWindow!: () => void;
   @Input() onArrayEdit!: (len:number, max:number, min:number) => void;
   @Input() updateArray!: (val: number, idx: number) => void;
@@ -91,7 +92,9 @@ export class MainToolbarComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    this.setupEditArrayControls()
+    this.setupEditArrayControls();
+    this.arrMax.patchValue(this.arrayParameters.max)
+    this.arrMin.patchValue(this.arrayParameters.min)
   }
 
   onEdit() {

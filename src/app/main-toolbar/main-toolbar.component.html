@@ -85,49 +85,47 @@
             </tbody>
           </table>
         </div>
-      <div class="overlay">
-          <mat-form-field appearance="outline">
-            <mat-label>Array length</mat-label>
-            <input matInput 
-              [formControl]="arrLength"
-              required
-              (change) ="onEdit()"
-            ><mat-error *ngIf="arrLength.invalid">{{getEditFormErrorMSg(arrLength)}}</mat-error>
-          </mat-form-field>
-          <mat-form-field appearance="outline">
-            <mat-label>Minimum value</mat-label>
-            <input matInput
-              [formControl]="arrMin"
-              required
-              (change) ="onEdit()"
-            ><mat-error *ngIf="arrMin.invalid">{{getEditFormErrorMSg(arrMin)}}</mat-error>
-          </mat-form-field>
-          <mat-form-field appearance="outline">
-            <mat-label>Maximum value</mat-label>
-            <input matInput
-              [formControl]="arrMax"
-              required
-              (change) ="onEdit()"
-            ><mat-error *ngIf="arrMax.invalid">{{getEditFormErrorMSg(arrMax)}}</mat-error>
-          </mat-form-field>
-          <button mat-button
-            (click)="manualEditOpen = !manualEditOpen"
-            cdkOverlayOrigin
-          >View / Edit</button>
-          <button mat-button
-            (click)="onSendToAll()"
-            (click)="editMenuOpen = !editMenuOpen"
-            (click)="manualEditOpen = false"
-          >Synchronize</button>
-          <button mat-button
-            (click)="editMenuOpen = !editMenuOpen"
-            (click)="manualEditOpen = false"
-          >Close</button>
-        </div>
-
+        <div class="overlay">
+            <mat-form-field appearance="outline">
+              <mat-label>Array length</mat-label>
+              <input matInput 
+                [formControl]="arrLength"
+                required
+                (change) ="onEdit()"
+              ><mat-error *ngIf="arrLength.invalid">{{getEditFormErrorMSg(arrLength)}}</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Minimum value</mat-label>
+              <input matInput
+                [formControl]="arrMin"
+                required
+                (change) ="onEdit()"
+              ><mat-error *ngIf="arrMin.invalid">{{getEditFormErrorMSg(arrMin)}}</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Maximum value</mat-label>
+              <input matInput
+                [formControl]="arrMax"
+                required
+                (change) ="onEdit()"
+              ><mat-error *ngIf="arrMax.invalid">{{getEditFormErrorMSg(arrMax)}}</mat-error>
+            </mat-form-field>
+            <button mat-button
+              (click)="onNew()"
+            >New</button>
+            <button mat-button
+              (click)="manualEditOpen = !manualEditOpen"
+            >View / Edit</button>
+            <button mat-button
+              (click)="onSendToAll()"
+            >Synchronize</button>
+            <button mat-button
+              (click)="editMenuOpen = !editMenuOpen"
+              (click)="manualEditOpen = false"
+            >Close</button>
+          </div>
         </div>
       </ng-template>
-
 
       <button mat-mini-fab
         matTooltip="Add sort window"

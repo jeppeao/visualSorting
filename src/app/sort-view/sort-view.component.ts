@@ -33,6 +33,7 @@ export class SortViewComponent implements OnInit, OnDestroy {
   @Input() globalReset$!: Observable<void>;
   @Input() globalSpeed$!: Observable<number>;
   @Input() globalArray$!: Observable<number[]>;
+  @Input() initArray!: number[];
   @Input() windowAddDelete$!: Observable<void>;
   @Input() destroySelf: () => void = () => {};
 
@@ -48,7 +49,7 @@ export class SortViewComponent implements OnInit, OnDestroy {
  
   ngOnInit(): void {
     this.subs.add(this.globalIsOn$.subscribe(this.isOn$));
-    this.sorterService.defineSorter(this.sort);
+    this.sorterService.defineSorter(this.sort, this.initArray);
     this.sorterStatus = this.sorterService.getNext();
     this.subs.add(this.globalReset$.subscribe(() => this.restart()));
     this.subs.add(this.globalSpeed$.subscribe((speed) => this.changeSpeed(speed)));

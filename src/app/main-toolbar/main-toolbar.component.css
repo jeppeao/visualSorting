@@ -65,7 +65,7 @@ td > div > input {
 
 .overlay > button {
   background-color: #eee;
-  margin: 3px;
+  margin-bottom: 2px;
 }
 
 .overlay > button:focus {

@@ -35,6 +35,7 @@ export class MainViewComponent implements OnInit {
     componentRef.instance.globalReset$ = this.reset$;
     componentRef.instance.globalSpeed$ = this.speed$;
     componentRef.instance.globalArray$ = this.array$;
+    componentRef.instance.initArray = this.curArray;
     componentRef.instance.windowAddDelete$ = this.windowAddDelete$;
     componentRef.instance.destroySelf = () => {
       setTimeout(() => this.windowAddDelete$.next(), 10);
@@ -81,7 +82,15 @@ export class MainViewComponent implements OnInit {
 
   updateArray = (val: number, idx: number) => {
     this.curArray.splice(idx, 1, val);
+    if (val > this.arrayParameters.max) {
+      this.arrayParameters = {...this.arrayParameters, max: val};
+
+    }
+    else if (val < this.arrayParameters.min) {
+      this.arrayParameters = {...this.arrayParameters, min: val};
+    }
     this.curArray = [...this.curArray]
+
   }
 
   newSortWindow = () => {
@@ -100,6 +109,10 @@ export class MainViewComponent implements OnInit {
       this.arrayParameters.max,
       this.arrayParameters.min,
     );
+  }
+
+  onNew = () => {
+    this.curArray = this.newArray();
   }
 
   speedToMs(speed: string) {

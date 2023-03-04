@@ -7,19 +7,15 @@ import { Sort } from './constants';
 @Injectable()
 export class SorterService {
 
-  initialArray: number[] = this.sortService.randomArray(
-    DEFAULT_ARRAY_PARAMETERS.length,
-    DEFAULT_ARRAY_PARAMETERS.max,
-    DEFAULT_ARRAY_PARAMETERS.min
-  );
+  initialArray!: number[];
   sortType: Sort = {} as Sort;
   sorter: Generator = {} as Generator;
   SorterStatus = {} as SorterStatus;  
 
   constructor(private sortService: SortService, private classService: ClassService) { }
 
-  defineSorter(sortType: Sort, array: number[] = this.initialArray) {
-    this.sorter = this.sortService.getSorter(sortType, this.initialArray);
+  defineSorter(sortType: Sort, array: number[]) {
+    this.sorter = this.sortService.getSorter(sortType, array);
     this.initialArray = [...array];
     this.sortType = sortType;
   }
