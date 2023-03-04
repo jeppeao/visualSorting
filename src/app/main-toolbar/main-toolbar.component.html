@@ -48,6 +48,7 @@
       <button mat-mini-fab
         matTooltip="Edit array"
         (click)="editMenuOpen = !editMenuOpen"
+        (click)="manualEditOpen = false"
         cdkOverlayOrigin
         #trigger="cdkOverlayOrigin"
         ><mat-icon>edit</mat-icon>
@@ -57,11 +58,37 @@
         cdkConnectedOverlay
         [cdkConnectedOverlayOrigin]="trigger"
         [cdkConnectedOverlayOpen]="editMenuOpen"
-      ><div class="overlay">
+      >
+      <div class="overlay-container">
+        <div *ngIf="manualEditOpen" class="manual-edit-container">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody> 
+              <tr *ngFor="let val of array; let idx=index">
+                <td>{{ idx }}</td>
+                <td>
+                  <div id="td-val">
+                    <input matInput
+                      #input
+                      required
+                      [formControl]="arrVals[idx]"
+                      (change) ="onManEdit(input.value, idx)"
+                    />
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      <div class="overlay">
           <mat-form-field appearance="outline">
             <mat-label>Array length</mat-label>
             <input matInput 
-              placeholder="10"
               [formControl]="arrLength"
               required
               (change) ="onEdit()"
@@ -70,7 +97,6 @@
           <mat-form-field appearance="outline">
             <mat-label>Minimum value</mat-label>
             <input matInput
-              placeholder="10"
               [formControl]="arrMin"
               required
               (change) ="onEdit()"
@@ -79,22 +105,29 @@
           <mat-form-field appearance="outline">
             <mat-label>Maximum value</mat-label>
             <input matInput
-              placeholder="10"
               [formControl]="arrMax"
               required
               (change) ="onEdit()"
             ><mat-error *ngIf="arrMax.invalid">{{getEditFormErrorMSg(arrMax)}}</mat-error>
           </mat-form-field>
           <button mat-button
+            (click)="manualEditOpen = !manualEditOpen"
+            cdkOverlayOrigin
+          >View / Edit</button>
+          <button mat-button
             (click)="onSendToAll()"
+            (click)="editMenuOpen = !editMenuOpen"
+            (click)="manualEditOpen = false"
           >Synchronize</button>
           <button mat-button
             (click)="editMenuOpen = !editMenuOpen"
-            cdkOverlayOrigin
-            #trigger="cdkOverlayOrigin"
+            (click)="manualEditOpen = false"
           >Close</button>
         </div>
+
+        </div>
       </ng-template>
+
 
       <button mat-mini-fab
         matTooltip="Add sort window"

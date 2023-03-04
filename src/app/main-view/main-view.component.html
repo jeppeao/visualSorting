@@ -1,5 +1,6 @@
 <app-main-toolbar
   [arrayParameters]="arrayParameters"
+  [array]="curArray"
   [onPlay]="emitPlay" 
   [onPause]="emitPause" 
   [onDelete]="emitDelete"
@@ -7,7 +8,8 @@
   [onSetSpeed]="emitSpeed"
   [onNewSortWindow]="newSortWindow"
   [onArrayEdit]="editArray"
-  [onSendToAll]="emitNewArray"
+  [updateArray]="updateArray"
+  [onSendToAll]="emitArray"
 ></app-main-toolbar>
 
 <div class="sort-view-container">

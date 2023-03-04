@@ -6,6 +6,43 @@ mat-icon {
   transform: scale(1.4);
 }
 
+table {
+  table-layout: auto;
+  margin-left: 2px;
+}
+
+tr :nth-child(1):not(th) {
+  width: 23px;
+  text-align: left;
+  color: grey;
+  font-size: 0.9em;
+}
+
+tr :nth-child(2) {
+  text-align: left;
+
+  display: flex;
+}
+
+th {
+  text-align: left;
+}
+
+#td-val {
+  width: 100%;
+  display: flex;
+}
+
+td > div > input {
+  flex: 1;
+  border: none;
+  height: 20px;
+  color: #333;
+  font-size: 1.1em;
+  border: 1px solid #eef;
+  border-radius: 4px;
+}
+
 #control-row {
   width: 100%;
   display: flex;
@@ -18,11 +55,12 @@ mat-icon {
   border: 2px solid black;
   display: flex;
   flex-direction: column;
+  gap: 4px;
   padding-top: 20px;
   width:150px;
   border-radius: 8px;
   background-color: white;
-  transform: translate(-36%);
+  height: 380px;
 }
 
 .overlay > button {
@@ -32,6 +70,25 @@ mat-icon {
 
 .overlay > button:focus {
   animation: none;
+}
+
+.overlay-container {
+  width: 250px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.manual-edit-container{
+  background-color: white;
+  width:105px;
+  border: 2px solid black;
+  border-radius: 8px;
+  margin-right: -2px;
+  padding-right: 4px;
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+  overflow-y: scroll;
 }
 
 .select-menu {
@@ -69,6 +126,10 @@ button:focus {
 
 button:active {
   animation: none;
+}
+
+input.ng-invalid {
+  background-color: red;
 }
 
 @keyframes activate {

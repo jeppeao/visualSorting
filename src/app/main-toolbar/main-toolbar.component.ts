@@ -1,7 +1,20 @@
-import { Component, Input } from '@angular/core';
-import { ValidatorFn, AbstractControl, ValidationErrors, FormControl, Validators } from '@angular/forms';
-import { MatTooltipDefaultOptions, MAT_TOOLTIP_DEFAULT_OPTIONS } from '@angular/material/tooltip';
-import { DEFAULT_STEP_TIME, DEFAULT_ARRAY_PARAMETERS } from '../constants';
+import { Component, Input, OnChanges, OnInit, SimpleChange, SimpleChanges } from '@angular/core';
+import { 
+  ValidatorFn,
+  AbstractControl,
+  ValidationErrors,
+  FormControl,
+  Validators,
+  FormArray
+} from '@angular/forms';
+import { 
+  MatTooltipDefaultOptions, 
+  MAT_TOOLTIP_DEFAULT_OPTIONS
+} from '@angular/material/tooltip';
+import { 
+  DEFAULT_STEP_TIME,
+  DEFAULT_ARRAY_PARAMETERS
+} from '../constants';
 
 export const tooltipDefaults: MatTooltipDefaultOptions = {
   showDelay: 1000,
@@ -30,8 +43,9 @@ function integer(): ValidatorFn {
     useValue: tooltipDefaults
   }],
 })
-export class MainToolbarComponent {
+export class MainToolbarComponent implements OnInit, OnChanges {
 
+  @Input() array: number[] = []; 
   @Input() arrayParameters = DEFAULT_ARRAY_PARAMETERS;
   @Input() onPlay!: () => void; 
   @Input() onPause!: () => void; 
@@ -41,11 +55,13 @@ export class MainToolbarComponent {
   @Input() onDelete!: () => void;
   @Input() onNewSortWindow!: () => void;
   @Input() onArrayEdit!: (len:number, max:number, min:number) => void;
+  @Input() updateArray!: (val: number, idx: number) => void;
   @Input() onSendToAll!: () => void;
   
   speed = DEFAULT_STEP_TIME;
   selectedSpeed = 'Standard';
   editMenuOpen = false;
+  manualEditOpen = false;
 
   arrLength = new FormControl(
     this.arrayParameters.length,
@@ -65,6 +81,19 @@ export class MainToolbarComponent {
     [Validators.required, integer()]
   );
 
+  arrVals!: FormControl[];
+  arrValControl!: FormArray<FormControl<number>>;
+
+  constructor() {}
+
+  ngOnInit(): void {
+    this.setupEditArrayControls()
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    this.setupEditArrayControls()
+  }
+
   onEdit() {
     if (
       this.arrLength.valid &&
@@ -80,6 +109,21 @@ export class MainToolbarComponent {
         +this.arrMin.value,
       )
     }
+  }
+
+  onManEdit(val: string, idx: number) {
+    if (this.arrValControl.valid) {
+      this.updateArray(parseInt(val), idx);
+    }
+  }
+
+  setupEditArrayControls() {
+    this.arrVals = this.array.map((val, idx) => {
+      return new FormControl(
+        val, [Validators.required, integer()]
+      )
+    });
+    this.arrValControl = new FormArray(this.arrVals);
   }
 
   getEditFormErrorMSg(ctrl: FormControl) {

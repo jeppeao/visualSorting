@@ -10,7 +10,7 @@ import { DEFAULT_ARRAY_PARAMETERS } from '../constants';
   templateUrl: './main-view.component.html',
   styleUrls: ['./main-view.component.css'],
 })
-export class MainViewComponent implements OnInit{
+export class MainViewComponent implements OnInit {
 
   @ViewChild(SortHostDirective, {static: true}) sortHost!: SortHostDirective;
   arrayParameters = DEFAULT_ARRAY_PARAMETERS;
@@ -25,7 +25,6 @@ export class MainViewComponent implements OnInit{
   constructor(private sortService: SortService) {}
 
   ngOnInit() {
-    this.loadComponent();
     this.loadComponent();
   }
 
@@ -67,8 +66,7 @@ export class MainViewComponent implements OnInit{
     this.speed$.next(this.speedToMs(speed));
   }
 
-  emitNewArray = () => {
-    this.curArray = this.newArray();
+  emitArray = () => {
     this.array$.next(this.curArray);
   }
 
@@ -79,6 +77,11 @@ export class MainViewComponent implements OnInit{
   ) =>  {
     this.updateArrayParameters(len, max, min);
     this.curArray = this.newArray();
+  }
+
+  updateArray = (val: number, idx: number) => {
+    this.curArray.splice(idx, 1, val);
+    this.curArray = [...this.curArray]
   }
 
   newSortWindow = () => {
