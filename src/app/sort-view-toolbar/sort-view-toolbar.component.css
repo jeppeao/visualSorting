@@ -30,8 +30,6 @@ button:active {
 
 mat-option {
   font-size: 80%;
-  border-radius: 2%;
-  border: 1px solid lightgrey;
 }
 
 mat-select {

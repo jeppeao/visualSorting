@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy} from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { DEFAULT_STEP_TIME, Sort, SorterStatus } from '../constants';
 import {
   interval,
@@ -9,6 +9,8 @@ import {
 } from 'rxjs'
 import { MAT_TOOLTIP_DEFAULT_OPTIONS, MatTooltipDefaultOptions} from '@angular/material/tooltip';
 import { SorterService } from '../sorter.service';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { WarningDialogComponent } from '../warning-dialog/warning-dialog.component';
 
 export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
   showDelay: 2000,
@@ -39,13 +41,17 @@ export class SortViewComponent implements OnInit, OnDestroy {
 
   stepTime: number = DEFAULT_STEP_TIME;
   sort = Sort.insertion;
+  array!: number[];
   sorterStatus!: SorterStatus;
   touched = false;
   ctrlSubscription = this.newCtrlSubscription();
   isOn$ = new BehaviorSubject(false);
   subs = new Subscription();
 
-  constructor (private sorterService: SorterService) { }
+  constructor (
+    private sorterService: SorterService, 
+    public dialog: MatDialog
+  ) { }
  
   ngOnInit(): void {
     this.subs.add(this.globalIsOn$.subscribe(this.isOn$));
@@ -54,11 +60,43 @@ export class SortViewComponent implements OnInit, OnDestroy {
     this.subs.add(this.globalReset$.subscribe(() => this.restart()));
     this.subs.add(this.globalSpeed$.subscribe((speed) => this.changeSpeed(speed)));
     this.subs.add(this.globalArray$.subscribe((array) => this.changeArray(array)));
+    this.array = this.initArray;
     this.pause();
   }
 
-   ngOnDestroy(): void {
+  ngOnDestroy(): void {
     this.subs.unsubscribe();
+  }
+
+  openDialog(msg: string) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = msg;
+    dialogConfig.maxWidth = '350px';
+    this.dialog.open(WarningDialogComponent, dialogConfig);
+  }
+
+  displayWarning() {
+    if (this.sort === Sort.miracle) {
+      this.openDialog(
+      "Miracle sort may take a very long time to finish"
+      );
+    }
+
+    if (this.sort === Sort.permutation && this.array.length > 8) {
+      this.openDialog(
+      "Permutation sort may take a long time to finish, consider a shorter array"
+      );
+    }
+
+    if (this.sort === Sort.counting) {
+      const range = Math.max(...this.array) - Math.min(...this.array) + 1;
+      if (range > 500)
+      this.openDialog(
+      "If max and min values are far apart counting sort may require a larger display and may slow down app"
+      );
+    }
   }
 
   play = () => { 
@@ -104,8 +142,10 @@ export class SortViewComponent implements OnInit, OnDestroy {
   }
 
   changeArray(array: number[]) {
+    this.array = array;
     this.sorterService.setArray(array);
     this.restart();
+    this.displayWarning();
   }
 
   onShuffleClick = () => {
@@ -114,7 +154,9 @@ export class SortViewComponent implements OnInit, OnDestroy {
   }
 
   setSortType = (type: Sort) => {
+    this.sort = type;
     this.sorterService.setSortType(type);
     this.restart();
+    this.displayWarning();
   }
 }

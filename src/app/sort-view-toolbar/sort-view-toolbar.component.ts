@@ -38,10 +38,6 @@ export class SortViewToolbarComponent implements AfterViewInit, OnDestroy {
 
   constructor (private host: ElementRef) {}
 
-  onSortSelection() {
-    this.setSortType(this.sortSelectionToType());
-  }
-
   ngAfterViewInit(): void {
     this.responsiveMenuToggle()
     this.subs.add(this.windowAddDelete$.subscribe(() => this.responsiveMenuToggle()));
@@ -49,6 +45,10 @@ export class SortViewToolbarComponent implements AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subs.unsubscribe();  
+  }
+
+  onSortSelection() {
+    this.setSortType(this.sortSelectionToType());
   }
 
   sortSelectionToType() {

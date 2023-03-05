@@ -21,8 +21,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MainToolbarComponent } from './main-toolbar/main-toolbar.component';
 import { SortViewToolbarComponent } from './sort-view-toolbar/sort-view-toolbar.component';
-import { FormsModule } from '@angular/forms';
-
+import { MatDialogModule } from '@angular/material/dialog';
+import { WarningDialogComponent } from './warning-dialog/warning-dialog.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +32,8 @@ import { FormsModule } from '@angular/forms';
     SortViewComponent,
     SortHostDirective,
     MainToolbarComponent,
-    SortViewToolbarComponent
+    SortViewToolbarComponent,
+    WarningDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -47,13 +48,13 @@ import { FormsModule } from '@angular/forms';
     OverlayModule,
     ReactiveFormsModule,
     MatInputModule,
-    FormsModule,
+    MatDialogModule,
   ],
   providers: [
     SortService,
     ClassService,
     SorterService
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
