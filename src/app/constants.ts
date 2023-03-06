@@ -64,6 +64,11 @@ export interface CountingSortStatus extends SortStatus {
   state: string,
 }
 
+export interface RadixSortStatus extends SortStatus {
+  state: string,
+  arrLen: number,
+}
+
 export interface MiracleSortStatus {
   arr: number[],
   info: { sorted: string };
@@ -102,6 +107,7 @@ export enum Sort {
   merge = 'merge',
   miracle = 'miracle',
   cycle = 'cycle',
-  counting = 'counting'
+  counting = 'counting',
+  radix = 'radix'
 }
 

@@ -73,6 +73,8 @@ export class SortViewToolbarComponent implements AfterViewInit, OnDestroy {
         return Sort.cycle;
       case 'counting':
         return Sort.counting;
+      case 'radix':
+        return Sort.radix;
       default:
         return Sort.insertion;
     }

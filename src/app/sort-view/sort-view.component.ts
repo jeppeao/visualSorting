@@ -80,21 +80,20 @@ export class SortViewComponent implements OnInit, OnDestroy {
   displayWarning() {
     if (this.sort === Sort.miracle) {
       this.openDialog(
-      "Miracle sort may take a very long time to finish"
+        "Miracle sort may take a very long time"
       );
     }
-
-    if (this.sort === Sort.permutation && this.array.length > 8) {
-      this.openDialog(
-      "Permutation sort may take a long time to finish, consider a shorter array"
-      );
-    }
+    // if (this.sort === Sort.permutation && this.array.length > 8) {
+    //   this.openDialog(
+    //   "Permutation sort may take a long time to finish, consider a shorter array"
+    //   );
+    // }
 
     if (this.sort === Sort.counting) {
       const range = Math.max(...this.array) - Math.min(...this.array) + 1;
-      if (range > 500)
+      if (range > 200)
       this.openDialog(
-      "If max and min values are far apart counting sort may require a larger display and may slow down app"
+        "Counting sort with integer range > ~100 may not display properly and may slow down the app"
       );
     }
   }

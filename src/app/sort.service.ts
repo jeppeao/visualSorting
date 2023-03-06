@@ -501,7 +501,7 @@ export class SortService {
 
   *countingSortGen(array: number[]) {
     const arr = [...array];
-    const info = { 'count list length': 0, 'items scanned': 0 };
+    const info = { 'count list length': 0, scanned: 0 };
     let min: number = arr[0], max: number = arr[0];
     
     yield { arr: [...arr], i:-1, info, j: -1, state: 'minmax' }
@@ -509,7 +509,7 @@ export class SortService {
     for (let i=0; i< arr.length; i++) {
       min = arr[i] < min ? arr[i] : min;
       max = arr[i] > max ? arr[i] : max;
-      info['items scanned'] += 1;
+      info.scanned += 1;
       info['count list length'] = max - min + 1;
       yield { arr: [...arr], i, info, j: -1, state: 'minmax' }
     }
@@ -517,14 +517,14 @@ export class SortService {
     info['count list length'] = max - min + 1;
     for (let i=0; i < array.length; i++) {
       counts[array[i] - min] += 1;
-      info['items scanned'] += 1;
+      info.scanned += 1;
       yield {arr: [...counts, max, min ,...arr], i, info, j:-1, state: 'count'}
     }
     let i = 0;
     for (let j=min; j<=max; j++) {
       for (let c=0; c<counts[j - min]; c++) {
         arr[i] = j;
-        info['items scanned'] += 1;
+        info.scanned += 1;
         yield {
           arr: [...counts, max, min, ...arr], 
           i, info, j: j-min, state: 'distribute'
@@ -533,6 +533,100 @@ export class SortService {
       }
     }
     yield { arr: [...arr], i, info, j: -1, state: 'done' }
+  }
+
+  *radixSortGen(array: number[]) {
+    const arr = [...array];
+    const info = {insertions: 0, stage: 'ready'};
+    const arrLen = arr.length;
+
+    function getDigit(n: number, pos: number) {
+      return Math.floor(Math.abs(n) / 10**(pos-1)) % 10;
+    }
+
+    yield {arr: [...arr], info, i: -1, j:-1, state: 'ready', arrLen};
+
+    // find longest number 
+    let longestNumber = 0;
+    for (let i=0; i<arr.length; i++) {
+      let cur = Math.abs(arr[i])
+      longestNumber = cur > longestNumber ? cur : longestNumber;
+      info.insertions += 1;
+      info.stage = 'counting digits';
+      yield {arr: [...arr], info, i, j:-1, state: 'longestNumber', arrLen};
+    }
+    
+    if (longestNumber === 0) {
+      info.stage = 'done';
+      yield {arr: [...arr], info, i: -1, j:-1, state: 'done', arrLen};
+      return;
+    }
+    const digits = Math.floor(Math.log10(longestNumber)) + 1;
+    
+    for (let d=1; d<=digits; d++) {
+      const buckets:number[][] = [];
+      info.stage = 'filling buckets';
+      for (let i=0; i<arr.length; i++) {
+        const v = getDigit(arr[i], d);
+        (buckets[v] || (buckets[v] = [])).push(arr[i]); 
+        info.insertions += 1;
+        yield {
+          arr: [...buckets.flat(), 0, ...arr], info, i, 
+          j:-1, state: 'bucketFill', arrLen
+        };
+      }
+      info.stage = 'filling array';
+      
+      for (let j=0, arrIndx=0; j<buckets.length; j++) {
+        if (!buckets[j]) continue;
+        for (let bi=0; bi < buckets[j].length; bi++) {
+          arr[arrIndx++] = buckets[j][bi];
+          info.insertions += 1;
+          yield {
+            arr: [...buckets.flat(), 0, ...arr], info, i:arrIndx-1, 
+            j:-1, state: 'arrayFill', arrLen
+          };
+        }
+      }
+    }
+    info.stage = 'positives and negatives bucket';
+    
+    // extra loops to sort negative numbers
+    const buckets: number[][] = [[],[]];
+    let arrIdx = 0;
+
+    for (let i=0; i<arr.length; i++) {
+      buckets[(arr[i]<0 ? 0 : 1)].push(arr[i]);
+      info.insertions += 1;
+      yield {
+        arr: [...buckets.flat(), 0, ...arr], info, i, 
+        j:-1, state: 'bucketFill', arrLen
+      };
+    }
+    info.stage = 'negatives fill';
+    let negCount = buckets[0].length;
+    // order of negative numbers need to be reversed
+    for (let i=buckets[0].length-1; i>=0; i--) {
+      arr[arrIdx++] = buckets[0][i];        
+      info.insertions += 1;
+      yield {
+        arr: [...buckets.flat(), 0, ...arr], info, i, 
+        j: arrIdx-1, state: 'negFill', arrLen
+      };
+    }
+    info.stage = 'positives fill';
+
+    for (let i=0; i<buckets[1].length; i++) {
+      arr[arrIdx++] = buckets[1][i];        
+      info.insertions += 1;
+      yield {
+        arr: [...buckets.flat(), 0, ...arr], info, i: i+negCount, 
+        j:-1, state: 'posFill', arrLen
+      };
+    }
+
+    info.stage = 'done';
+    yield {arr: [...arr], info, i: -1, j:-1, state: 'done', arrLen};
   }
 
   *miracleSortGen(array: number[]) {
@@ -570,6 +664,8 @@ export class SortService {
           return this.countingSortGen(array);
       case Sort.miracle:
         return this.miracleSortGen(array);
+      case Sort.radix:
+        return this.radixSortGen(array);
     }
   }
 }

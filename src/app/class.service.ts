@@ -12,6 +12,7 @@ import {
   MiracleSortStatus,
   CycleSortStatus,
   CountingSortStatus,
+  RadixSortStatus,
  } from './constants';
 
 @Injectable({
@@ -43,7 +44,8 @@ export class ClassService {
         return this.getCycleSortClassList(status as CycleSortStatus);
       case (Sort.counting):
         return this.getCountingSortClassList(status as CountingSortStatus);
-          
+      case (Sort.radix):
+          return this.getRadixSortClassList(status as RadixSortStatus);     
       }
   }
 
@@ -323,6 +325,63 @@ export class ClassService {
       if (status.state === 'distribute' && idx === status.j) {
         clist.push(ArrayClass.current);  
       }
+
+      return clist.join(' ');
+    });
+  }
+
+  getRadixSortClassList(status: RadixSortStatus): string[] {
+    const gapIdx = status.arr.length - status.arrLen - 1;
+    return status.arr.map((_, idx) => {
+      const clist = [ArrayClass.value];
+      
+      if (status.state === 'done') {
+        clist.push(ArrayClass.sorted);
+      }
+      if (status.state === 'longestNumber' && status.i === idx) {
+        clist.push(ArrayClass.current);
+      }
+      else if ( idx === gapIdx ) {
+        return ArrayClass.value;
+      }
+      if (status.state === 'bucketFill' && status.i + gapIdx + 1 === idx) {
+        clist.push(ArrayClass.current);
+      }
+      if (status.state === 'bucketFill' && idx < gapIdx) {
+        clist.push(ArrayClass.dim);
+      }
+      if (status.state === 'arrayFill' && status.i === idx) {
+        clist.push(ArrayClass.current);
+      }
+      if (status.state === 'arrayFill' && status.i + gapIdx + 1 < idx) {
+        clist.push(ArrayClass.dim);
+      } 
+      if (status.state === 'posFill' && status.i === idx) {
+        clist.push(ArrayClass.current);
+      }
+      if (status.state === 'posFill' && status.i + gapIdx + 1 < idx) {
+        clist.push(ArrayClass.dim);
+      } 
+      if (status.state === 'negFill' && status.i === idx) {
+        clist.push(ArrayClass.current);
+      }
+      if (status.state === 'negFill' && status.j + gapIdx + 1 < idx) {
+        clist.push(ArrayClass.dim);
+      } 
+      if ((
+        status.state === 'negFill' &&
+        status.j + gapIdx + 1 >= idx && idx > gapIdx 
+      ) ||
+      (
+        status.state === 'posFill' &&
+        status.i + gapIdx + 1 >= idx && idx > gapIdx 
+      )
+        ){
+        clist.push(ArrayClass.sorted)
+      }
+     if (!clist.includes(ArrayClass.sorted)){
+        clist.push(ArrayClass.unsorted);
+     }
 
       return clist.join(' ');
     });
